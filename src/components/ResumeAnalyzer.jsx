@@ -2,9 +2,66 @@ import React, { useState, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
 import { 
   FileText, Upload, Sparkles, CheckCircle2, AlertCircle, 
-  FileCheck, RefreshCw, Award, Copy, Check, UserCheck
+  FileCheck, RefreshCw, Award, Copy, Check, UserCheck,
+  File, Trash2, RotateCcw, FileCode, Paperclip, X
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
+
+const SAMPLE_RESUMES = {
+  tech: `AAMIR HASSAN
+New Delhi, India | Email: aamir.hassan@gmail.com | Phone: +91 98765 43210
+Target Role: Software & Data Engineering
+
+SUMMARY
+Results-driven Computer Science student with hands-on experience in full-stack web application development, machine learning model optimization, and REST API engineering.
+
+TECHNICAL SKILLS & COMPETENCIES
+Languages: Python, JavaScript (ES6+), C++, SQL, HTML5, CSS3
+Frameworks & Libraries: React, Node.js, Express, PyTorch, TensorFlow, Pandas, NumPy
+Tools & Platforms: Git, GitHub, Docker, Postman, Linux, VS Code, Vercel
+
+PROJECT EXPERIENCE
+1. Intelligent Career Recommendation & ATS Resume Analyzer
+- Built a multi-module React web application for student guidance and career analysis.
+- Integrated canvas-confetti, chart.js, and real-time keyword matching algorithms.
+- Formatted state management and async API pipelines to optimize execution time by 40%.
+
+2. Autonomous AI Chatbot & Knowledge Engine
+- Created a context-aware chatbot using Google Gemini AI APIs and vector embeddings.
+- Developed robust fallback handling and rate-limiting middleware.
+
+EDUCATION
+Delhi Technological University — B.Tech Computer Science (3rd Year)
+Aggregate Performance: 84% CGPA (2022 – 2026)
+
+CERTIFICATIONS & EXTRACURRICULARS
+- Certified in Technical Implementation & System Design
+- Active participant in technical hackathons, paper presentations, and coding competitions`,
+
+  data: `AAMIR HASSAN
+New Delhi, India | Email: aamir.hassan@gmail.com | Phone: +91 98765 43210
+Target Role: Data Science & Analytics Specialist
+
+SUMMARY
+Analytical and detail-oriented student specializing in exploratory data analysis, predictive statistical modeling, data visualization dashboards, and BigQuery data processing.
+
+TECHNICAL SKILLS & COMPETENCIES
+Data Analysis: Python, R, SQL, Pandas, NumPy, SciPy, Scikit-Learn, Statsmodels
+Visualization: Tableau, PowerBI, Matplotlib, Seaborn, Chart.js
+Databases: PostgreSQL, MySQL, BigQuery, MongoDB
+
+PROJECT EXPERIENCE
+1. Student Performance & Aptitude Predictive Matrix
+- Processed 10,000+ academic record samples using Python Pandas & Scikit-Learn.
+- Achieved 92% classification accuracy on career domain prediction models.
+
+2. Interactive Higher Education Analytics Dashboard
+- Designed dynamic web visualizer with filtering for 500+ Indian universities and NIRF ranks.
+
+EDUCATION
+Delhi Technological University — B.Tech Computer Science (3rd Year)
+Aggregate Performance: 84% CGPA`
+};
 
 const generateResumeFromProfile = (profile, targetRoleTitle = 'Software & Data Engineering') => {
   const name = profile?.name || 'STUDENT NAME';
@@ -108,21 +165,40 @@ export const ResumeAnalyzer = () => {
   const [syncedSuccess, setSyncedSuccess] = useState(false);
 
   const [uploadedFileName, setUploadedFileName] = useState(null);
+  const [uploadedFileDetails, setUploadedFileDetails] = useState(null);
+  const [resumeSource, setResumeSource] = useState('profile'); // 'profile' | 'uploaded' | 'sample'
   const [isDragging, setIsDragging] = useState(false);
 
   // Live real-time analysis effect whenever studentProfile or targetCareer changes
   useEffect(() => {
-    const updatedText = generateResumeFromProfile(studentProfile, targetCareer.title);
-    setResumeText(updatedText);
-    const result = analyzeResumeText(updatedText, targetCareer, studentProfile);
-    if (result) {
-      setResumeScanResult(result);
+    if (resumeSource === 'profile') {
+      const updatedText = generateResumeFromProfile(studentProfile, targetCareer.title);
+      setResumeText(updatedText);
+      const result = analyzeResumeText(updatedText, targetCareer, studentProfile);
+      if (result) {
+        setResumeScanResult(result);
+      }
     }
-  }, [studentProfile, targetCareer]);
+  }, [studentProfile, targetCareer, resumeSource]);
 
   const processUploadedFile = (file) => {
     if (!file) return;
+
+    const fileExt = file.name.split('.').pop()?.toUpperCase() || 'DOCUMENT';
+    const sizeFormatted = file.size > 1024 * 1024 
+      ? (file.size / (1024 * 1024)).toFixed(2) + ' MB'
+      : (file.size / 1024).toFixed(1) + ' KB';
+
+    const details = {
+      name: file.name,
+      size: sizeFormatted,
+      type: fileExt,
+      lastModified: file.lastModified ? new Date(file.lastModified).toLocaleDateString() : 'Today'
+    };
+
     setUploadedFileName(file.name);
+    setUploadedFileDetails(details);
+    setResumeSource('uploaded');
     setIsScanning(true);
 
     const reader = new FileReader();
@@ -135,13 +211,20 @@ export const ResumeAnalyzer = () => {
       } else if (content instanceof ArrayBuffer) {
         const textDecoder = new TextDecoder('utf-8');
         const rawStr = textDecoder.decode(content);
-        // Extract readable alphanumeric strings from binary PDF/DOCX stream
+        // Extract readable words, lines, and alphanumeric sequences
         const matches = rawStr.match(/[A-Za-z0-9\s\+\#\.\,\-\:\@\/\(\)]{3,}/g);
-        extractedText = matches ? matches.join(' ') : rawStr;
+        if (matches && matches.length > 5) {
+          extractedText = matches
+            .map(m => m.trim())
+            .filter(m => m.length > 2)
+            .join('\n');
+        } else {
+          extractedText = rawStr.replace(/[^\x20-\x7E\n\r\t]/g, ' ');
+        }
       }
 
-      if (!extractedText || extractedText.trim().length < 20) {
-        extractedText = `RESUME DOCUMENT: ${file.name.toUpperCase()}\nCandidate Name: ${studentProfile.name}\nPrimary Skills: ${studentProfile.skills.join(', ')}\nTarget Position: ${targetCareer.title}\nDocument file uploaded: ${file.name}`;
+      if (!extractedText || extractedText.trim().length < 30) {
+        extractedText = `RESUME DOCUMENT: ${file.name.toUpperCase()}\nCandidate Name: ${studentProfile.name}\nPrimary Skills: ${studentProfile.skills.join(', ')}\nTarget Position: ${targetCareer.title}\nDocument file uploaded: ${file.name} (${sizeFormatted})`;
       }
 
       setResumeText(extractedText);
@@ -150,7 +233,7 @@ export const ResumeAnalyzer = () => {
         setResumeScanResult(result);
       }
       setIsScanning(false);
-      confetti({ particleCount: 80, spread: 70, origin: { y: 0.6 } });
+      confetti({ particleCount: 85, spread: 75, origin: { y: 0.6 } });
     };
 
     if (file.name.toLowerCase().endsWith('.txt')) {
@@ -173,7 +256,35 @@ export const ResumeAnalyzer = () => {
     }
   };
 
+  const handleClearUploadedFile = () => {
+    setUploadedFileName(null);
+    setUploadedFileDetails(null);
+    setResumeSource('profile');
+    const updatedText = generateResumeFromProfile(studentProfile, targetCareer.title);
+    setResumeText(updatedText);
+    const result = analyzeResumeText(updatedText, targetCareer, studentProfile);
+    if (result) {
+      setResumeScanResult(result);
+    }
+  };
+
+  const handleLoadSampleResume = (type) => {
+    const sample = SAMPLE_RESUMES[type] || SAMPLE_RESUMES.tech;
+    setUploadedFileName(null);
+    setUploadedFileDetails(null);
+    setResumeSource('sample');
+    setResumeText(sample);
+    const result = analyzeResumeText(sample, targetCareer, studentProfile);
+    if (result) {
+      setResumeScanResult(result);
+      confetti({ particleCount: 60, spread: 65, origin: { y: 0.6 } });
+    }
+  };
+
   const handleSyncProfile = () => {
+    setUploadedFileName(null);
+    setUploadedFileDetails(null);
+    setResumeSource('profile');
     const updatedText = generateResumeFromProfile(studentProfile, targetCareer.title);
     setResumeText(updatedText);
     setSyncedSuccess(true);
@@ -214,12 +325,18 @@ export const ResumeAnalyzer = () => {
     }));
 
     const newProfile = { ...studentProfile, skills: updatedSkills };
-    const updatedText = generateResumeFromProfile(newProfile, targetCareer.title);
-    setResumeText(updatedText);
-
-    const result = analyzeResumeText(updatedText, targetCareer, newProfile);
-    if (result) {
-      setResumeScanResult(result);
+    if (resumeSource === 'profile') {
+      const updatedText = generateResumeFromProfile(newProfile, targetCareer.title);
+      setResumeText(updatedText);
+      const result = analyzeResumeText(updatedText, targetCareer, newProfile);
+      if (result) {
+        setResumeScanResult(result);
+      }
+    } else {
+      const result = analyzeResumeText(resumeText, targetCareer, newProfile);
+      if (result) {
+        setResumeScanResult(result);
+      }
     }
   };
 
@@ -234,26 +351,30 @@ export const ResumeAnalyzer = () => {
         skills: updatedSkills
       }));
 
-      // Regenerate resume text with new skill
       const newProfile = { ...studentProfile, skills: updatedSkills };
-      const updatedText = generateResumeFromProfile(newProfile, targetCareer.title);
-      setResumeText(updatedText);
-
-      const result = analyzeResumeText(updatedText, targetCareer, newProfile);
-      if (result) {
-        setResumeScanResult(result);
-        confetti({ particleCount: 50, spread: 50, origin: { y: 0.6 } });
+      if (resumeSource === 'profile') {
+        const updatedText = generateResumeFromProfile(newProfile, targetCareer.title);
+        setResumeText(updatedText);
+        const result = analyzeResumeText(updatedText, targetCareer, newProfile);
+        if (result) {
+          setResumeScanResult(result);
+          confetti({ particleCount: 50, spread: 50, origin: { y: 0.6 } });
+        }
+      } else {
+        const result = analyzeResumeText(resumeText, targetCareer, newProfile);
+        if (result) {
+          setResumeScanResult(result);
+          confetti({ particleCount: 50, spread: 50, origin: { y: 0.6 } });
+        }
       }
     }
   };
 
   const handleAutoOptimizeForRole = () => {
-    // Collect all required skills for target career
     const missingSkills = targetCareer.requiredSkills.map(sk => 
       sk.includes('/') ? sk.split('/')[0].trim() : sk
     );
 
-    // Merge into studentProfile.skills
     const mergedSkills = Array.from(new Set([...studentProfile.skills, ...missingSkills]));
     
     setStudentProfile(prev => ({
@@ -264,6 +385,9 @@ export const ResumeAnalyzer = () => {
     const newProfile = { ...studentProfile, skills: mergedSkills };
     const updatedText = generateResumeFromProfile(newProfile, targetCareer.title);
     setResumeText(updatedText);
+    setResumeSource('profile');
+    setUploadedFileName(null);
+    setUploadedFileDetails(null);
 
     const result = analyzeResumeText(updatedText, targetCareer, newProfile);
     if (result) {
@@ -285,7 +409,7 @@ export const ResumeAnalyzer = () => {
               ATS Resume Optimizer for {targetCareer.title}
             </h2>
             <p style={{ color: 'var(--text-muted)', maxWidth: '750px' }}>
-              Your ATS resume content is dynamically synchronized with your <strong>Student Profile ({studentProfile.name})</strong>. Click 1-Click Auto-Optimize to inject all required role keywords.
+              Upload your resume (.pdf, .docx, .txt) or sync directly with your <strong>Student Profile ({studentProfile.name})</strong> for automated keyword extraction & ATS score analysis.
             </p>
           </div>
 
@@ -309,46 +433,153 @@ export const ResumeAnalyzer = () => {
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <FileText color="#f472b6" size={20} />
-              <h3 style={{ fontSize: '1.1rem', fontWeight: 700 }}>Resume Content (Live Profile Sync)</h3>
+              <h3 style={{ fontSize: '1.1rem', fontWeight: 700 }}>Resume Content & Document Upload</h3>
             </div>
-            <span className="badge badge-indigo" style={{ fontSize: '0.75rem' }}>
-              Target: {targetCareer.title}
-            </span>
+            
+            {resumeSource === 'uploaded' && (
+              <span className="badge badge-emerald" style={{ fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                <Paperclip size={12} /> Source: Uploaded File
+              </span>
+            )}
+            {resumeSource === 'sample' && (
+              <span className="badge badge-purple" style={{ fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                <Sparkles size={12} /> Source: Sample Preset
+              </span>
+            )}
+            {resumeSource === 'profile' && (
+              <span className="badge badge-indigo" style={{ fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                <UserCheck size={12} /> Source: Profile Sync
+              </span>
+            )}
           </div>
 
-          {/* Upload Dropzone */}
-          <div 
-            onDragOver={e => { e.preventDefault(); setIsDragging(true); }}
-            onDragLeave={() => setIsDragging(false)}
-            onDrop={handleDrop}
-            style={{
-              border: isDragging ? '2px dashed #ec4899' : '2px dashed rgba(255,255,255,0.15)',
-              borderRadius: 'var(--radius-md)',
-              padding: '16px',
-              textAlign: 'center',
-              backgroundColor: isDragging ? 'rgba(236,72,153,0.08)' : 'rgba(255,255,255,0.02)',
-              transition: 'all 0.2s ease',
-              cursor: 'pointer'
-            }}
-            onClick={() => document.getElementById('resume-file-input')?.click()}
-          >
-            <input 
-              id="resume-file-input" 
-              type="file" 
-              accept=".pdf,.doc,.docx,.txt" 
-              onChange={handleFileUpload} 
-              style={{ display: 'none' }} 
-            />
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
-              <Upload color="#ec4899" size={24} />
-              <div>
-                <div style={{ fontSize: '0.9rem', fontWeight: 600 }}>
-                  {uploadedFileName ? `Uploaded: ${uploadedFileName}` : 'Drag & Drop Resume File (.pdf, .docx, .txt)'}
+          {/* Upload Dropzone Container */}
+          {!uploadedFileDetails ? (
+            <div 
+              onDragOver={e => { e.preventDefault(); setIsDragging(true); }}
+              onDragLeave={() => setIsDragging(false)}
+              onDrop={handleDrop}
+              style={{
+                border: isDragging ? '2px dashed #ec4899' : '2px dashed rgba(255,255,255,0.18)',
+                borderRadius: 'var(--radius-md)',
+                padding: '20px 16px',
+                textAlign: 'center',
+                backgroundColor: isDragging ? 'rgba(236,72,153,0.12)' : 'rgba(255,255,255,0.02)',
+                boxShadow: isDragging ? '0 0 20px rgba(236,72,153,0.2)' : 'none',
+                transition: 'all 0.2s ease',
+                cursor: 'pointer'
+              }}
+              onClick={() => document.getElementById('resume-file-input')?.click()}
+            >
+              <input 
+                id="resume-file-input" 
+                type="file" 
+                accept=".pdf,.doc,.docx,.txt" 
+                onChange={handleFileUpload} 
+                style={{ display: 'none' }} 
+              />
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+                <div style={{
+                  width: '48px',
+                  height: '48px',
+                  borderRadius: '50%',
+                  background: 'linear-gradient(135deg, rgba(236,72,153,0.2) 0%, rgba(139,92,246,0.2) 100%)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginBottom: '2px'
+                }}>
+                  <Upload color="#ec4899" size={24} />
                 </div>
-                <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-                  Click or drag document file to parse content & run live ATS score
+                
+                <div>
+                  <div style={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--text-main)' }}>
+                    Upload Resume Document (.pdf, .docx, .doc, .txt)
+                  </div>
+                  <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: '2px' }}>
+                    Drag & drop your file here, or click to browse (Max 5MB)
+                  </div>
+                </div>
+
+                <div style={{ display: 'flex', gap: '6px', marginTop: '6px' }}>
+                  <span className="badge" style={{ background: 'rgba(239, 68, 68, 0.15)', color: '#fca5a5', fontSize: '0.68rem', border: '1px solid rgba(239, 68, 68, 0.3)' }}>PDF</span>
+                  <span className="badge" style={{ background: 'rgba(59, 130, 246, 0.15)', color: '#93c5fd', fontSize: '0.68rem', border: '1px solid rgba(59, 130, 246, 0.3)' }}>DOCX</span>
+                  <span className="badge" style={{ background: 'rgba(16, 185, 129, 0.15)', color: '#6ee7b7', fontSize: '0.68rem', border: '1px solid rgba(16, 185, 129, 0.3)' }}>TXT</span>
                 </div>
               </div>
+            </div>
+          ) : (
+            /* Uploaded File Info Card */
+            <div className="glass-card" style={{ padding: '14px 18px', background: 'linear-gradient(135deg, rgba(16,185,129,0.1) 0%, rgba(99,102,241,0.08) 100%)', border: '1px solid rgba(52, 211, 153, 0.3)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <div style={{ padding: '10px', borderRadius: '10px', background: 'rgba(52, 211, 153, 0.18)', color: '#34d399' }}>
+                  <FileCheck size={24} />
+                </div>
+                <div>
+                  <div style={{ fontSize: '0.9rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    {uploadedFileDetails.name}
+                    <span className="badge badge-emerald" style={{ fontSize: '0.68rem', padding: '2px 8px' }}>
+                      {uploadedFileDetails.type}
+                    </span>
+                  </div>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'flex', gap: '12px', marginTop: '2px' }}>
+                    <span>Size: {uploadedFileDetails.size}</span>
+                    <span>•</span>
+                    <span>Uploaded: {uploadedFileDetails.lastModified}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div style={{ display: 'flex', gap: '8px' }}>
+                <button 
+                  onClick={() => document.getElementById('resume-file-input')?.click()} 
+                  className="btn btn-secondary btn-sm"
+                  style={{ fontSize: '0.78rem', padding: '6px 12px' }}
+                >
+                  <Upload size={14} />
+                  <span>Replace</span>
+                </button>
+                <input 
+                  id="resume-file-input" 
+                  type="file" 
+                  accept=".pdf,.doc,.docx,.txt" 
+                  onChange={handleFileUpload} 
+                  style={{ display: 'none' }} 
+                />
+
+                <button 
+                  onClick={handleClearUploadedFile} 
+                  className="btn btn-secondary btn-sm"
+                  style={{ fontSize: '0.78rem', padding: '6px 12px', color: '#fca5a5', borderColor: 'rgba(239, 68, 68, 0.3)' }}
+                  title="Clear file and revert to synced profile text"
+                >
+                  <RotateCcw size={14} />
+                  <span>Revert to Profile</span>
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Quick Presets Bar */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px', padding: '8px 12px', background: 'rgba(255,255,255,0.02)', borderRadius: 'var(--radius-sm)', border: '1px solid rgba(255,255,255,0.05)' }}>
+            <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: 600 }}>Quick Presets:</span>
+            <div style={{ display: 'flex', gap: '8px' }}>
+              <button 
+                onClick={() => handleLoadSampleResume('tech')}
+                className="btn btn-secondary btn-sm" 
+                style={{ fontSize: '0.72rem', padding: '4px 10px' }}
+              >
+                <FileCode size={12} color="#818cf8" />
+                <span>Sample Tech Resume</span>
+              </button>
+              <button 
+                onClick={() => handleLoadSampleResume('data')}
+                className="btn btn-secondary btn-sm" 
+                style={{ fontSize: '0.72rem', padding: '4px 10px' }}
+              >
+                <FileText size={12} color="#22d3ee" />
+                <span>Sample Data Resume</span>
+              </button>
             </div>
           </div>
 
