@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
+import { Logo3D } from './Logo3D';
+import { LanguageSelector } from './LanguageSelector';
+import { ThemeToggle } from './ThemeToggle';
 import { 
   Mail, Lock, User, Phone, ShieldCheck, KeyRound, 
   ArrowRight, RefreshCw, CheckCircle2, AlertCircle, Sparkles, LogIn, Compass, Map, FileText, Award, GraduationCap, Briefcase, Eye, EyeOff
@@ -14,7 +17,8 @@ export const LoginPage = () => {
     resendOtp, 
     sendForgotPasswordOtp, 
     resetPassword,
-    pendingOtp
+    pendingOtp,
+    t
   } = useApp();
 
   const [mode, setMode] = useState('login'); // 'login' | 'register' | 'otp_verify' | 'forgot_password' | 'reset_password'
@@ -186,14 +190,29 @@ export const LoginPage = () => {
     <div style={{
       minHeight: '100vh',
       width: '100%',
-      background: 'radial-gradient(circle at 50% 20%, #1e1b4b 0%, #0f172a 60%, #050714 100%)',
+      background: 'var(--bg-dark)',
       display: 'flex',
+      flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
       padding: '24px 16px',
       position: 'relative',
       overflow: 'hidden'
     }}>
+
+      {/* Top Header Control Bar for Language & Dark/Light Theme */}
+      <div style={{
+        position: 'absolute',
+        top: '20px',
+        right: '24px',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '12px',
+        zIndex: 50
+      }}>
+        <LanguageSelector />
+        <ThemeToggle />
+      </div>
 
       {/* Decorative Glow Elements */}
       <div style={{
@@ -233,29 +252,7 @@ export const LoginPage = () => {
 
         {/* Left Side: Branding & Features Showcase */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-            <div style={{
-              width: '50px',
-              height: '50px',
-              borderRadius: '16px',
-              background: 'linear-gradient(135deg, #6366f1 0%, #06b6d4 100%)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              boxShadow: '0 0 25px rgba(99, 102, 241, 0.6)'
-            }}>
-              <Sparkles size={28} color="#fff" />
-            </div>
-            <div>
-              <span className="badge badge-cyan" style={{ marginBottom: '4px' }}>PS ID: SIH25094</span>
-              <h1 style={{ fontSize: '2.2rem', fontWeight: 800, lineHeight: 1.1 }} className="gradient-text">
-                MargDarshak AI
-              </h1>
-              <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-                Ministry of Education • Smart Education & Career Portal
-              </p>
-            </div>
-          </div>
+          <Logo3D size="large" showText={true} />
 
           <h2 style={{ fontSize: '1.5rem', fontWeight: 700, lineHeight: 1.3, color: '#f8fafc' }}>
             One-Stop AI Career, Scholarship & College Recommendation Platform
@@ -290,10 +287,10 @@ export const LoginPage = () => {
         <div className="glass-card" style={{
           padding: '32px',
           borderRadius: '24px',
-          boxShadow: '0 20px 50px rgba(0, 0, 0, 0.6), 0 0 30px rgba(99, 102, 241, 0.25)',
-          border: '1px solid rgba(255, 255, 255, 0.12)',
-          background: 'rgba(15, 23, 42, 0.75)',
-          backdropFilter: 'blur(16px)'
+          boxShadow: 'var(--shadow-card)',
+          border: '1px solid var(--border-color)',
+          background: 'var(--bg-card)',
+          backdropFilter: 'blur(20px)'
         }}>
 
           {/* Mode Switcher Tabs */}
@@ -303,9 +300,10 @@ export const LoginPage = () => {
               gridTemplateColumns: '1fr 1fr',
               gap: '6px',
               marginBottom: '20px',
-              background: 'rgba(0,0,0,0.3)',
-              padding: '4px',
-              borderRadius: 'var(--radius-sm)'
+              background: 'var(--bg-card-hover)',
+              padding: '6px',
+              borderRadius: 'var(--radius-sm)',
+              border: '1px solid var(--border-color)'
             }}>
               <button
                 onClick={() => { setMode('login'); setErrorMsg(''); }}
@@ -313,9 +311,9 @@ export const LoginPage = () => {
                   padding: '10px',
                   borderRadius: 'var(--radius-sm)',
                   fontSize: '0.88rem',
-                  fontWeight: mode === 'login' ? 700 : 500,
+                  fontWeight: mode === 'login' ? 700 : 600,
                   background: mode === 'login' ? 'var(--primary)' : 'transparent',
-                  color: mode === 'login' ? '#fff' : 'var(--text-muted)',
+                  color: mode === 'login' ? '#ffffff' : 'var(--text-muted)',
                   border: 'none',
                   cursor: 'pointer',
                   transition: 'all 0.2s ease'
@@ -329,9 +327,9 @@ export const LoginPage = () => {
                   padding: '10px',
                   borderRadius: 'var(--radius-sm)',
                   fontSize: '0.88rem',
-                  fontWeight: mode === 'register' ? 700 : 500,
+                  fontWeight: mode === 'register' ? 700 : 600,
                   background: mode === 'register' ? 'var(--primary)' : 'transparent',
-                  color: mode === 'register' ? '#fff' : 'var(--text-muted)',
+                  color: mode === 'register' ? '#ffffff' : 'var(--text-muted)',
                   border: 'none',
                   cursor: 'pointer',
                   transition: 'all 0.2s ease'
@@ -352,7 +350,8 @@ export const LoginPage = () => {
               borderRadius: 'var(--radius-sm)',
               background: 'rgba(239, 68, 68, 0.15)',
               border: '1px solid rgba(239, 68, 68, 0.3)',
-              color: '#fca5a5',
+              color: '#ef4444',
+              fontWeight: 600,
               fontSize: '0.82rem',
               marginBottom: '16px'
             }}>
@@ -365,11 +364,11 @@ export const LoginPage = () => {
           {mode === 'login' && (
             <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               <div>
-                <label style={{ fontSize: '0.78rem', color: 'var(--text-muted)', display: 'block', marginBottom: '6px' }}>
+                <label style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-main)', display: 'block', marginBottom: '6px' }}>
                   Gmail Address
                 </label>
                 <div style={{ position: 'relative' }}>
-                  <Mail size={16} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
+                  <Mail size={16} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--primary)' }} />
                   <input
                     type="email"
                     name="email"
@@ -377,14 +376,10 @@ export const LoginPage = () => {
                     placeholder="student@gmail.com"
                     value={formData.email}
                     onChange={handleChange}
+                    className="input-field"
                     style={{
-                      width: '100%',
-                      padding: '10px 12px 10px 38px',
-                      borderRadius: 'var(--radius-sm)',
-                      background: 'rgba(0,0,0,0.25)',
-                      border: '1px solid var(--border-color)',
-                      color: 'var(--text-light)',
-                      fontSize: '0.88rem'
+                      paddingLeft: '38px',
+                      fontSize: '0.9rem'
                     }}
                   />
                 </div>
@@ -392,17 +387,17 @@ export const LoginPage = () => {
 
               <div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-                  <label style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Password</label>
+                  <label style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-main)' }}>Password</label>
                   <button 
                     type="button" 
                     onClick={() => { setMode('forgot_password'); setErrorMsg(''); }}
-                    style={{ background: 'none', border: 'none', color: '#818cf8', fontSize: '0.75rem', cursor: 'pointer', padding: 0 }}
+                    style={{ background: 'none', border: 'none', color: 'var(--primary)', fontWeight: 600, fontSize: '0.78rem', cursor: 'pointer', padding: 0 }}
                   >
                     Forgot Password?
                   </button>
                 </div>
                 <div style={{ position: 'relative' }}>
-                  <Lock size={16} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
+                  <Lock size={16} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--primary)' }} />
                   <input
                     type={showPassword ? "text" : "password"}
                     name="password"
@@ -410,14 +405,11 @@ export const LoginPage = () => {
                     placeholder="••••••••"
                     value={formData.password}
                     onChange={handleChange}
+                    className="input-field"
                     style={{
-                      width: '100%',
-                      padding: '10px 38px 10px 38px',
-                      borderRadius: 'var(--radius-sm)',
-                      background: 'rgba(0,0,0,0.25)',
-                      border: '1px solid var(--border-color)',
-                      color: 'var(--text-light)',
-                      fontSize: '0.88rem'
+                      paddingLeft: '38px',
+                      paddingRight: '38px',
+                      fontSize: '0.9rem'
                     }}
                   />
                   <button
@@ -443,12 +435,12 @@ export const LoginPage = () => {
                 </div>
               </div>
 
-              <button type="submit" className="btn btn-primary" style={{ width: '100%', padding: '12px', marginTop: '6px', fontSize: '0.92rem' }}>
+              <button type="submit" className="btn btn-primary" style={{ width: '100%', padding: '12px', marginTop: '6px', fontSize: '0.92rem', fontWeight: 700 }}>
                 <LogIn size={18} />
                 <span>Sign In to Platform</span>
               </button>
 
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', margin: '8px 0', fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', margin: '12px 0', fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-muted)' }}>
                 <div style={{ flex: 1, height: '1px', background: 'var(--border-color)' }}></div>
                 <span>EVALUATION DEMO ACCESS</span>
                 <div style={{ flex: 1, height: '1px', background: 'var(--border-color)' }}></div>
@@ -457,10 +449,18 @@ export const LoginPage = () => {
               <button 
                 type="button" 
                 onClick={handleDemoLogin} 
-                className="btn btn-secondary" 
-                style={{ width: '100%', padding: '10px', fontSize: '0.85rem' }}
+                className="btn btn-secondary glass-card-interactive" 
+                style={{
+                  width: '100%',
+                  padding: '12px',
+                  fontSize: '0.88rem',
+                  fontWeight: 700,
+                  background: 'var(--bg-card-hover)',
+                  border: '1px solid var(--border-active)',
+                  color: 'var(--text-main)'
+                }}
               >
-                <Sparkles size={16} color="#34d399" />
+                <Sparkles size={16} color="var(--primary)" />
                 <span>1-Click Demo Access (Aamir Hassan)</span>
               </button>
             </form>
@@ -470,9 +470,9 @@ export const LoginPage = () => {
           {mode === 'register' && (
             <form onSubmit={handleRegister} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
               <div>
-                <label style={{ fontSize: '0.78rem', color: 'var(--text-muted)', display: 'block', marginBottom: '6px' }}>Full Name</label>
+                <label style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-main)', display: 'block', marginBottom: '6px' }}>Full Name</label>
                 <div style={{ position: 'relative' }}>
-                  <User size={16} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
+                  <User size={16} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--primary)' }} />
                   <input
                     type="text"
                     name="name"
@@ -480,23 +480,19 @@ export const LoginPage = () => {
                     placeholder="Aamir Hassan"
                     value={formData.name}
                     onChange={handleChange}
+                    className="input-field"
                     style={{
-                      width: '100%',
-                      padding: '10px 12px 10px 38px',
-                      borderRadius: 'var(--radius-sm)',
-                      background: 'rgba(0,0,0,0.25)',
-                      border: '1px solid var(--border-color)',
-                      color: 'var(--text-light)',
-                      fontSize: '0.88rem'
+                      paddingLeft: '38px',
+                      fontSize: '0.9rem'
                     }}
                   />
                 </div>
               </div>
 
               <div>
-                <label style={{ fontSize: '0.78rem', color: 'var(--text-muted)', display: 'block', marginBottom: '6px' }}>Gmail Address</label>
+                <label style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-main)', display: 'block', marginBottom: '6px' }}>Gmail Address</label>
                 <div style={{ position: 'relative' }}>
-                  <Mail size={16} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
+                  <Mail size={16} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--primary)' }} />
                   <input
                     type="email"
                     name="email"
@@ -504,37 +500,29 @@ export const LoginPage = () => {
                     placeholder="yourname@gmail.com"
                     value={formData.email}
                     onChange={handleChange}
+                    className="input-field"
                     style={{
-                      width: '100%',
-                      padding: '10px 12px 10px 38px',
-                      borderRadius: 'var(--radius-sm)',
-                      background: 'rgba(0,0,0,0.25)',
-                      border: '1px solid var(--border-color)',
-                      color: 'var(--text-light)',
-                      fontSize: '0.88rem'
+                      paddingLeft: '38px',
+                      fontSize: '0.9rem'
                     }}
                   />
                 </div>
               </div>
 
               <div>
-                <label style={{ fontSize: '0.78rem', color: 'var(--text-muted)', display: 'block', marginBottom: '6px' }}>Mobile Number</label>
+                <label style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-main)', display: 'block', marginBottom: '6px' }}>Mobile Number</label>
                 <div style={{ position: 'relative' }}>
-                  <Phone size={16} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
+                  <Phone size={16} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--primary)' }} />
                   <input
                     type="tel"
                     name="phone"
                     placeholder="+91 98765 43210"
                     value={formData.phone}
                     onChange={handleChange}
+                    className="input-field"
                     style={{
-                      width: '100%',
-                      padding: '10px 12px 10px 38px',
-                      borderRadius: 'var(--radius-sm)',
-                      background: 'rgba(0,0,0,0.25)',
-                      border: '1px solid var(--border-color)',
-                      color: 'var(--text-light)',
-                      fontSize: '0.88rem'
+                      paddingLeft: '38px',
+                      fontSize: '0.9rem'
                     }}
                   />
                 </div>
@@ -542,7 +530,7 @@ export const LoginPage = () => {
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
                 <div>
-                  <label style={{ fontSize: '0.78rem', color: 'var(--text-muted)', display: 'block', marginBottom: '6px' }}>Password</label>
+                  <label style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-main)', display: 'block', marginBottom: '6px' }}>Password</label>
                   <div style={{ position: 'relative' }}>
                     <input
                       type={showPassword ? "text" : "password"}
@@ -551,14 +539,10 @@ export const LoginPage = () => {
                       placeholder="••••••••"
                       value={formData.password}
                       onChange={handleChange}
+                      className="input-field"
                       style={{
-                        width: '100%',
-                        padding: '10px 32px 10px 12px',
-                        borderRadius: 'var(--radius-sm)',
-                        background: 'rgba(0,0,0,0.25)',
-                        border: '1px solid var(--border-color)',
-                        color: 'var(--text-light)',
-                        fontSize: '0.88rem'
+                        paddingRight: '32px',
+                        fontSize: '0.9rem'
                       }}
                     />
                     <button
@@ -583,7 +567,7 @@ export const LoginPage = () => {
                   </div>
                 </div>
                 <div>
-                  <label style={{ fontSize: '0.78rem', color: 'var(--text-muted)', display: 'block', marginBottom: '6px' }}>Confirm</label>
+                  <label style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-main)', display: 'block', marginBottom: '6px' }}>Confirm</label>
                   <div style={{ position: 'relative' }}>
                     <input
                       type={showConfirmPassword ? "text" : "password"}
@@ -592,14 +576,10 @@ export const LoginPage = () => {
                       placeholder="••••••••"
                       value={formData.confirmPassword}
                       onChange={handleChange}
+                      className="input-field"
                       style={{
-                        width: '100%',
-                        padding: '10px 32px 10px 12px',
-                        borderRadius: 'var(--radius-sm)',
-                        background: 'rgba(0,0,0,0.25)',
-                        border: '1px solid var(--border-color)',
-                        color: 'var(--text-light)',
-                        fontSize: '0.88rem'
+                        paddingRight: '32px',
+                        fontSize: '0.9rem'
                       }}
                     />
                     <button
@@ -625,7 +605,7 @@ export const LoginPage = () => {
                 </div>
               </div>
 
-              <button type="submit" className="btn btn-primary" style={{ width: '100%', padding: '12px', marginTop: '6px' }}>
+              <button type="submit" className="btn btn-primary" style={{ width: '100%', padding: '12px', marginTop: '6px', fontWeight: 700 }}>
                 <span>Send Gmail OTP Code</span>
                 <ArrowRight size={16} />
               </button>

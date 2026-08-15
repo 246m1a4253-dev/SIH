@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
+import { Logo3D } from './Logo3D';
 import { 
   Mail, Lock, User, Phone, ShieldCheck, KeyRound, 
   X, ArrowRight, RefreshCw, CheckCircle2, AlertCircle, Sparkles, LogIn, Eye, EyeOff
@@ -18,7 +19,8 @@ export const AuthModal = () => {
     verifyOtp, 
     resendOtp, 
     sendForgotPasswordOtp, 
-    resetPassword 
+    resetPassword,
+    t
   } = useApp();
 
   // Local Form States

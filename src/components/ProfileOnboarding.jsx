@@ -4,14 +4,14 @@ import { User, GraduationCap, Award, Heart, Sparkles, CheckCircle2, Plus, X, Arr
 import confetti from 'canvas-confetti';
 
 const POPULAR_SKILLS = [
-  'Python', 'Machine Learning', 'SQL', 'JavaScript', 'React.js', 
-  'Data Structures', 'Git', 'Deep Learning', 'Statistics', 'Docker', 
+  'Python', 'Machine Learning', 'SQL', 'JavaScript', 'React.js',
+  'Data Structures', 'Git', 'Deep Learning', 'Statistics', 'Docker',
   'Networking', 'Public Speaking', 'Biology', 'Clinical Care', 'Indian Polity'
 ];
 
 const POPULAR_INTERESTS = [
-  'Artificial Intelligence', 'Coding', 'Data Science', 'Problem Solving', 
-  'Healthcare & Medicine', 'Public Policy', 'Cybersecurity', 'Web Development', 
+  'Artificial Intelligence', 'Coding', 'Data Science', 'Problem Solving',
+  'Healthcare & Medicine', 'Public Policy', 'Cybersecurity', 'Web Development',
   'Robotics', 'Civil Services', 'Law & Ethics'
 ];
 
@@ -93,7 +93,7 @@ export const ProfileOnboarding = () => {
   return (
     <div className="animate-fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
       {/* Header Banner */}
-      <div className="glass-card" style={{ padding: '28px', background: 'linear-gradient(135deg, rgba(99,102,241,0.15) 0%, rgba(6,182,212,0.1) 100%)' }}>
+      <div className="glass-card" style={{ padding: '28px', background: 'linear-gradient(135deg, rgba(37,99,235,0.08) 0%, rgba(16,185,129,0.08) 100%)', border: '1px solid #bfdbfe' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
           <div>
             <span className="badge badge-indigo" style={{ marginBottom: '8px' }}>Module 1: Student Profile</span>
@@ -104,9 +104,9 @@ export const ProfileOnboarding = () => {
               Your profile is processed by MargDarshak AI to match you with top careers, pinpoint missing skills, recommend state & national scholarships, and craft a month-by-month learning roadmap.
             </p>
           </div>
-          <button 
+          <button
             onClick={handleSubmit}
-            className="btn btn-primary" 
+            className="btn btn-primary"
             style={{ padding: '12px 24px', fontSize: '0.95rem' }}
           >
             <Sparkles size={18} />
@@ -117,26 +117,27 @@ export const ProfileOnboarding = () => {
       </div>
 
       {/* Account Verification & Security Card */}
-      <div className="glass-card" style={{ padding: '20px 24px', background: 'rgba(15, 23, 42, 0.4)' }}>
+      <div className="glass-card" style={{ padding: '20px 24px', background: '#ffffff', border: '1px solid #bfdbfe' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '14px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
             <div style={{
               width: '42px',
               height: '42px',
               borderRadius: '50%',
-              background: 'linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%)',
+              background: 'linear-gradient(135deg, #2563eb 0%, #10b981 100%)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               fontWeight: 800,
               fontSize: '1.1rem',
-              color: '#fff'
+              color: '#fff',
+              boxShadow: '0 4px 12px rgba(37, 99, 235, 0.25)'
             }}>
               {studentProfile.name ? studentProfile.name.charAt(0).toUpperCase() : 'S'}
             </div>
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <h4 style={{ fontSize: '1.05rem', fontWeight: 700 }}>{studentProfile.name}</h4>
+                <h4 style={{ fontSize: '1.05rem', fontWeight: 700, color: '#0f172a' }}>{studentProfile.name}</h4>
                 {currentUser && currentUser.isAuthenticated ? (
                   <span className="badge badge-emerald" style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.72rem' }}>
                     <ShieldCheck size={12} /> Verified Gmail ({studentProfile.email})
@@ -148,7 +149,7 @@ export const ProfileOnboarding = () => {
                 )}
               </div>
               <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: '2px' }}>
-                Profile Completeness: <strong style={{ color: '#38bdf8' }}>{completenessScore}%</strong> (8 Key Career Metrics Configured)
+                Profile Completeness: <strong style={{ color: '#2563eb' }}>{completenessScore}%</strong> (8 Key Career Metrics Configured)
               </div>
             </div>
           </div>
@@ -160,7 +161,7 @@ export const ProfileOnboarding = () => {
                 className="btn btn-secondary btn-sm"
                 style={{ fontSize: '0.8rem' }}
               >
-                <KeyRound size={14} color="#34d399" />
+                <KeyRound size={14} color="#10b981" />
                 <span>Reset Password</span>
               </button>
             ) : (
@@ -198,9 +199,9 @@ export const ProfileOnboarding = () => {
 
             <div className="input-group">
               <label className="input-label">Full Name</label>
-              <input 
-                type="text" 
-                className="input-field" 
+              <input
+                type="text"
+                className="input-field"
                 value={studentProfile.name}
                 onChange={e => handleInputChange('name', e.target.value)}
                 required
@@ -210,9 +211,9 @@ export const ProfileOnboarding = () => {
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
               <div className="input-group">
                 <label className="input-label">Age</label>
-                <input 
-                  type="number" 
-                  className="input-field" 
+                <input
+                  type="number"
+                  className="input-field"
                   value={studentProfile.age}
                   onChange={e => handleInputChange('age', e.target.value)}
                   required
@@ -220,7 +221,7 @@ export const ProfileOnboarding = () => {
               </div>
               <div className="input-group">
                 <label className="input-label">Gender</label>
-                <select 
+                <select
                   className="select-field"
                   value={studentProfile.gender}
                   onChange={e => handleInputChange('gender', e.target.value)}
@@ -234,7 +235,7 @@ export const ProfileOnboarding = () => {
 
             <div className="input-group">
               <label className="input-label">Category</label>
-              <select 
+              <select
                 className="select-field"
                 value={studentProfile.category}
                 onChange={e => handleInputChange('category', e.target.value)}
@@ -248,7 +249,7 @@ export const ProfileOnboarding = () => {
 
             <div className="input-group">
               <label className="input-label">Annual Family Income (For Scholarships)</label>
-              <select 
+              <select
                 className="select-field"
                 value={studentProfile.annualIncomeBracket}
                 onChange={e => handleInputChange('annualIncomeBracket', e.target.value)}
@@ -269,7 +270,7 @@ export const ProfileOnboarding = () => {
 
             <div className="input-group">
               <label className="input-label">Current Education Level</label>
-              <select 
+              <select
                 className="select-field"
                 value={studentProfile.educationLevel}
                 onChange={e => handleInputChange('educationLevel', e.target.value)}
@@ -284,9 +285,9 @@ export const ProfileOnboarding = () => {
 
             <div className="input-group">
               <label className="input-label">Board / Institution Name</label>
-              <input 
-                type="text" 
-                className="input-field" 
+              <input
+                type="text"
+                className="input-field"
                 value={studentProfile.boardOrUniversity}
                 onChange={e => handleInputChange('boardOrUniversity', e.target.value)}
                 placeholder="e.g. CBSE / ICSE / Central University"
@@ -296,9 +297,9 @@ export const ProfileOnboarding = () => {
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
               <div className="input-group">
                 <label className="input-label">Aggregate Marks / CGPA</label>
-                <input 
-                  type="text" 
-                  className="input-field" 
+                <input
+                  type="text"
+                  className="input-field"
                   value={studentProfile.percentageOrCgpa}
                   onChange={e => handleInputChange('percentageOrCgpa', e.target.value)}
                   placeholder="e.g. 84% or 8.5 CGPA"
@@ -306,9 +307,9 @@ export const ProfileOnboarding = () => {
               </div>
               <div className="input-group">
                 <label className="input-label">Max Fee Budget / Year</label>
-                <input 
-                  type="text" 
-                  className="input-field" 
+                <input
+                  type="text"
+                  className="input-field"
                   value={studentProfile.targetBudget}
                   onChange={e => handleInputChange('targetBudget', e.target.value)}
                   placeholder="e.g. ₹1.5 Lakhs"
@@ -318,7 +319,7 @@ export const ProfileOnboarding = () => {
 
             <div className="input-group">
               <label className="input-label">Preferred Study / Work Location</label>
-              <select 
+              <select
                 className="select-field"
                 value={studentProfile.preferredLocation}
                 onChange={e => handleInputChange('preferredLocation', e.target.value)}
@@ -347,9 +348,9 @@ export const ProfileOnboarding = () => {
             {studentProfile.skills.map((skill, idx) => (
               <span key={idx} className="badge badge-indigo" style={{ padding: '6px 12px', fontSize: '0.85rem' }}>
                 {skill}
-                <X 
-                  size={14} 
-                  style={{ cursor: 'pointer', marginLeft: '4px' }} 
+                <X
+                  size={14}
+                  style={{ cursor: 'pointer', marginLeft: '4px' }}
                   onClick={() => removeSkill(skill)}
                 />
               </span>
@@ -358,9 +359,9 @@ export const ProfileOnboarding = () => {
 
           {/* Add custom skill */}
           <div style={{ display: 'flex', gap: '10px' }}>
-            <input 
-              type="text" 
-              className="input-field" 
+            <input
+              type="text"
+              className="input-field"
               placeholder="Add a new skill (e.g. PyTorch, React, Public Speaking)..."
               value={newSkill}
               onChange={e => setNewSkill(e.target.value)}
@@ -377,8 +378,8 @@ export const ProfileOnboarding = () => {
             <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '8px' }}>Popular Skills to Tag:</div>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
               {POPULAR_SKILLS.filter(s => !studentProfile.skills.includes(s)).map((skill, idx) => (
-                <button 
-                  type="button" 
+                <button
+                  type="button"
                   key={idx}
                   onClick={() => addSkill(skill)}
                   className="btn btn-secondary btn-sm"
@@ -408,9 +409,9 @@ export const ProfileOnboarding = () => {
             {studentProfile.interests.map((interest, idx) => (
               <span key={idx} className="badge badge-pink" style={{ padding: '6px 12px', fontSize: '0.85rem' }}>
                 {interest}
-                <X 
-                  size={14} 
-                  style={{ cursor: 'pointer', marginLeft: '4px' }} 
+                <X
+                  size={14}
+                  style={{ cursor: 'pointer', marginLeft: '4px' }}
                   onClick={() => removeInterest(interest)}
                 />
               </span>
@@ -419,9 +420,9 @@ export const ProfileOnboarding = () => {
 
           {/* Add custom interest */}
           <div style={{ display: 'flex', gap: '10px' }}>
-            <input 
-              type="text" 
-              className="input-field" 
+            <input
+              type="text"
+              className="input-field"
               placeholder="Add an interest (e.g. Artificial Intelligence, Medicine)..."
               value={newInterest}
               onChange={e => setNewInterest(e.target.value)}
@@ -438,8 +439,8 @@ export const ProfileOnboarding = () => {
             <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '8px' }}>Popular Interest Areas:</div>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
               {POPULAR_INTERESTS.filter(i => !studentProfile.interests.includes(i)).map((interest, idx) => (
-                <button 
-                  type="button" 
+                <button
+                  type="button"
                   key={idx}
                   onClick={() => addInterest(interest)}
                   className="btn btn-secondary btn-sm"
@@ -454,9 +455,9 @@ export const ProfileOnboarding = () => {
 
         {/* Submit Bar */}
         <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '14px', marginTop: '12px' }}>
-          <button 
-            type="submit" 
-            className="btn btn-primary" 
+          <button
+            type="submit"
+            className="btn btn-primary"
             style={{ padding: '14px 32px', fontSize: '1rem' }}
           >
             <Sparkles size={20} />

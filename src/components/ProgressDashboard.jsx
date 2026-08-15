@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { 
-  LayoutDashboard, Award, CheckCircle2, TrendingUp, 
-  FileText, Briefcase, GraduationCap, Map, Sparkles
+  ChevronUp, ChevronDown, GraduationCap, Bookmark, TrendingUp, 
+  CheckCircle2, FileText, Briefcase, Award, Sparkles, User, Building, ExternalLink
 } from 'lucide-react';
 
 export const ProgressDashboard = () => {
@@ -14,169 +14,249 @@ export const ProgressDashboard = () => {
     savedColleges, 
     appliedInternships,
     calculateCareerMatch,
-    setActiveTab
+    setActiveTab,
+    t
   } = useApp();
+
+  // Accordion Expand/Collapse States
+  const [overviewOpen, setOverviewOpen] = useState(true);
+  const [profileOpen, setProfileOpen] = useState(false);
+  const [opportunitiesOpen, setOpportunitiesOpen] = useState(false);
 
   const careerMatchScore = calculateCareerMatch(targetCareer);
 
-  // Acquired skills count for target role
+  // Acquired skills calculation
   const acquiredCount = targetCareer.requiredSkills.filter(sk => 
     studentProfile.skills.some(userSk => userSk.toLowerCase() === sk.toLowerCase())
   ).length;
 
-  const totalRequired = targetCareer.requiredSkills.length;
+  const totalRequired = targetCareer.requiredSkills.length || 8;
   const skillCompletionPercent = Math.round((acquiredCount / totalRequired) * 100);
 
   return (
-    <div className="animate-fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-      {/* Header Banner */}
-      <div className="glass-card" style={{ padding: '28px', background: 'linear-gradient(135deg, rgba(99,102,241,0.18) 0%, rgba(6,182,212,0.12) 100%)' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
-          <div>
-            <span className="badge badge-indigo" style={{ marginBottom: '8px' }}>Module 10: Student Progress & Readiness Dashboard</span>
-            <h2 style={{ fontSize: '1.8rem', fontWeight: 800, marginBottom: '6px' }} className="gradient-text">
-              Welcome Back, {studentProfile.name}!
+    <div className="animate-fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '20px', maxWidth: '1200px', margin: '0 auto', padding: '10px 0' }}>
+      
+      {/* 1. Career Progress Overview Card (Accordion) */}
+      <div className="glass-card" style={{ borderRadius: '16px', overflow: 'hidden', border: '1px solid var(--border-color)' }}>
+        {/* Accordion Header */}
+        <div 
+          onClick={() => setOverviewOpen(!overviewOpen)}
+          style={{
+            padding: '18px 24px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            cursor: 'pointer',
+            borderBottom: overviewOpen ? '1px solid var(--border-color)' : 'none',
+            background: 'var(--bg-glass)',
+            userSelect: 'none'
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <TrendingUp size={20} color="var(--primary)" />
+            <h2 style={{ fontSize: '1.2rem', fontWeight: 700, margin: 0 }}>
+              Career Progress Overview
             </h2>
-            <p style={{ color: 'var(--text-muted)', maxWidth: '750px' }}>
-              Track your career readiness index, skill completion progress, resume ATS scores, scholarship bookmarks, and active internship applications in one place.
-            </p>
           </div>
-
-          <button onClick={() => setActiveTab('skillgap')} className="btn btn-primary">
-            <Sparkles size={18} />
-            <span>Continue Learning Roadmap</span>
+          <button style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-muted)' }}>
+            {overviewOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
           </button>
         </div>
+
+        {/* Accordion Body */}
+        {overviewOpen && (
+          <div style={{ padding: '24px' }} className="animate-fade-in">
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+              gap: '20px'
+            }}>
+              {/* Metric 1: Career Match */}
+              <div 
+                style={{
+                  background: 'var(--bg-card-hover)',
+                  border: '1px solid var(--border-color)',
+                  borderRadius: '12px',
+                  padding: '24px 20px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  textAlign: 'center',
+                  transition: 'transform 0.2s ease, box-shadow 0.2s ease'
+                }}
+                className="glass-card-interactive"
+              >
+                <div style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '12px' }}>
+                  Career Match
+                </div>
+                <div style={{ fontSize: '2.8rem', fontWeight: 800, color: '#2563eb', lineHeight: 1 }}>
+                  {careerMatchScore}%
+                </div>
+                <div style={{ fontSize: '0.75rem', color: 'var(--text-dim)', marginTop: '12px' }}>
+                  {targetCareer.title}
+                </div>
+              </div>
+
+              {/* Metric 2: Skills Mastered */}
+              <div 
+                style={{
+                  background: 'var(--bg-card-hover)',
+                  border: '1px solid var(--border-color)',
+                  borderRadius: '12px',
+                  padding: '24px 20px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  textAlign: 'center',
+                  transition: 'transform 0.2s ease, box-shadow 0.2s ease'
+                }}
+                className="glass-card-interactive"
+              >
+                <div style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '12px' }}>
+                  Skills Mastered
+                </div>
+                <div style={{ fontSize: '2.8rem', fontWeight: 800, color: '#10b981', lineHeight: 1 }}>
+                  {acquiredCount}/{totalRequired}
+                </div>
+                <div style={{ fontSize: '0.75rem', color: 'var(--text-dim)', marginTop: '12px' }}>
+                  {skillCompletionPercent}% Complete
+                </div>
+              </div>
+
+              {/* Metric 3: Resume Score */}
+              <div 
+                style={{
+                  background: 'var(--bg-card-hover)',
+                  border: '1px solid var(--border-color)',
+                  borderRadius: '12px',
+                  padding: '24px 20px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  textAlign: 'center',
+                  transition: 'transform 0.2s ease, box-shadow 0.2s ease'
+                }}
+                className="glass-card-interactive"
+              >
+                <div style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '12px' }}>
+                  Resume Score
+                </div>
+                <div style={{ fontSize: '2.8rem', fontWeight: 800, color: '#d97706', lineHeight: 1 }}>
+                  {resumeScanResult.score}/100
+                </div>
+                <div style={{ fontSize: '0.75rem', color: 'var(--text-dim)', marginTop: '12px' }}>
+                  Good
+                </div>
+              </div>
+
+              {/* Metric 4: Applications */}
+              <div 
+                style={{
+                  background: 'var(--bg-card-hover)',
+                  border: '1px solid var(--border-color)',
+                  borderRadius: '12px',
+                  padding: '24px 20px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  textAlign: 'center',
+                  transition: 'transform 0.2s ease, box-shadow 0.2s ease'
+                }}
+                className="glass-card-interactive"
+              >
+                <div style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '12px' }}>
+                  Applications
+                </div>
+                <div style={{ fontSize: '2.8rem', fontWeight: 800, color: '#ef4444', lineHeight: 1 }}>
+                  {appliedInternships.length}
+                </div>
+                <div style={{ fontSize: '0.75rem', color: 'var(--text-dim)', marginTop: '12px' }}>
+                  Active Submissions
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
-      {/* 4 Stat Overview Cards */}
-      <div className="grid-4">
-        {/* Card 1: Career Readiness Index */}
-        <div className="glass-card" style={{ padding: '20px', borderTop: '4px solid var(--primary)' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-            <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Career Match Rating</span>
-            <TrendingUp size={18} color="#818cf8" />
+      {/* 2. Saved Opportunities Accordion */}
+      <div className="glass-card" style={{ borderRadius: '16px', overflow: 'hidden', border: '1px solid var(--border-color)' }}>
+        <div 
+          onClick={() => setOpportunitiesOpen(!opportunitiesOpen)}
+          style={{
+            padding: '18px 24px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            cursor: 'pointer',
+            borderBottom: opportunitiesOpen ? '1px solid var(--border-color)' : 'none',
+            background: 'var(--bg-glass)',
+            userSelect: 'none'
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <Bookmark size={20} color="var(--primary)" />
+            <h2 style={{ fontSize: '1.2rem', fontWeight: 700, margin: 0 }}>
+              Saved Opportunities
+            </h2>
           </div>
-          <div style={{ fontSize: '2.2rem', fontWeight: 800, color: '#818cf8' }}>{careerMatchScore}%</div>
-          <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '4px' }}>
-            Target Role: <strong>{targetCareer.title}</strong>
-          </div>
+          <button style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-muted)' }}>
+            {opportunitiesOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+          </button>
         </div>
 
-        {/* Card 2: Skill Mastery */}
-        <div className="glass-card" style={{ padding: '20px', borderTop: '4px solid var(--accent-cyan)' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-            <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Required Skills Mastered</span>
-            <CheckCircle2 size={18} color="#22d3ee" />
-          </div>
-          <div style={{ fontSize: '2.2rem', fontWeight: 800, color: '#22d3ee' }}>
-            {acquiredCount} / {totalRequired}
-          </div>
-          <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '4px' }}>
-            {skillCompletionPercent}% of key role skills acquired
-          </div>
-        </div>
-
-        {/* Card 3: ATS Resume Score */}
-        <div className="glass-card" style={{ padding: '20px', borderTop: '4px solid var(--secondary)' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-            <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>ATS Resume Score</span>
-            <FileText size={18} color="#f472b6" />
-          </div>
-          <div style={{ fontSize: '2.2rem', fontWeight: 800, color: '#f472b6' }}>
-            {resumeScanResult.score} / 100
-          </div>
-          <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '4px' }}>
-            ATS Status: {resumeScanResult.score >= 80 ? 'High Pass Rate' : 'Needs Optimization'}
-          </div>
-        </div>
-
-        {/* Card 4: Saved & Applications */}
-        <div className="glass-card" style={{ padding: '20px', borderTop: '4px solid var(--accent-emerald)' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-            <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Internship Applications</span>
-            <Briefcase size={18} color="#34d399" />
-          </div>
-          <div style={{ fontSize: '2.2rem', fontWeight: 800, color: '#34d399' }}>
-            {appliedInternships.length} Active
-          </div>
-          <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '4px' }}>
-            {savedScholarships.length} Scholarships Bookmarked
-          </div>
-        </div>
-      </div>
-
-      {/* Breakdown Details Grid */}
-      <div className="grid-2">
-        {/* Profile Snapshot & Target Roadmap */}
-        <div className="glass-card" style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          <h3 style={{ fontSize: '1.15rem', fontWeight: 700, borderBottom: '1px solid var(--border-color)', paddingBottom: '10px' }}>
-            Student Profile Snapshot
-          </h3>
-
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', fontSize: '0.85rem' }}>
+        {opportunitiesOpen && (
+          <div style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '20px' }} className="animate-fade-in">
+            {/* Scholarships Section */}
             <div>
-              <span style={{ color: 'var(--text-muted)' }}>Education Level:</span>
-              <div style={{ fontWeight: 600 }}>{studentProfile.educationLevel}</div>
+              <div style={{ fontSize: '0.88rem', fontWeight: 700, marginBottom: '10px', display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--accent-cyan)' }}>
+                <Award size={16} />
+                <span>Bookmarked Scholarships ({savedScholarships.length})</span>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                {savedScholarships.map(sId => (
+                  <div key={sId} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 16px', background: 'var(--bg-card-hover)', border: '1px solid var(--border-color)', borderRadius: '10px', fontSize: '0.85rem' }}>
+                    <span style={{ fontWeight: 600 }}>
+                      {sId === 'pm-merit-scholarship' || sId === 'central-sector' 
+                        ? "Central Sector Scheme of Scholarships for University Students" 
+                        : "AICTE Pragati Scholarship for Girl Students"}
+                    </span>
+                    <span className="badge badge-emerald">Eligible for Apply</span>
+                  </div>
+                ))}
+              </div>
             </div>
+
+            {/* Internships Section */}
             <div>
-              <span style={{ color: 'var(--text-muted)' }}>Board / College:</span>
-              <div style={{ fontWeight: 600 }}>{studentProfile.boardOrUniversity}</div>
+              <div style={{ fontSize: '0.88rem', fontWeight: 700, marginBottom: '10px', display: 'flex', alignItems: 'center', gap: '6px', color: '#10b981' }}>
+                <Briefcase size={16} />
+                <span>Active Internship Submissions ({appliedInternships.length})</span>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                {appliedInternships.map(iId => (
+                  <div key={iId} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 16px', background: 'var(--bg-card-hover)', border: '1px solid var(--border-color)', borderRadius: '10px', fontSize: '0.85rem' }}>
+                    <span style={{ fontWeight: 600 }}>Microsoft Software Engineering Summer Intern 2025</span>
+                    <span className="badge badge-indigo">Application Under Review</span>
+                  </div>
+                ))}
+              </div>
             </div>
-            <div>
-              <span style={{ color: 'var(--text-muted)' }}>Aggregate Score:</span>
-              <div style={{ fontWeight: 600, color: '#34d399' }}>{studentProfile.percentageOrCgpa}</div>
-            </div>
-            <div>
-              <span style={{ color: 'var(--text-muted)' }}>Income Bracket:</span>
-              <div style={{ fontWeight: 600, color: '#fbbf24' }}>{studentProfile.annualIncomeBracket}</div>
+
+            <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end', marginTop: '10px' }}>
+              <button onClick={() => setActiveTab('scholarships')} className="btn btn-secondary btn-sm">
+                <span>Explore Scholarships</span>
+              </button>
+              <button onClick={() => setActiveTab('internships')} className="btn btn-primary btn-sm">
+                <span>Find Internships</span>
+              </button>
             </div>
           </div>
-
-          <div>
-            <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '8px' }}>Acquired Profile Skills:</div>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
-              {studentProfile.skills.map((sk, idx) => (
-                <span key={idx} className="badge badge-indigo" style={{ fontSize: '0.78rem' }}>{sk}</span>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Active Applications & Bookmarks */}
-        <div className="glass-card" style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          <h3 style={{ fontSize: '1.15rem', fontWeight: 700, borderBottom: '1px solid var(--border-color)', paddingBottom: '10px' }}>
-            Bookmarked Opportunities & Applications
-          </h3>
-
-          <div>
-            <div style={{ fontSize: '0.82rem', fontWeight: 600, color: '#67e8f9', marginBottom: '6px' }}>
-              Bookmarked Scholarships ({savedScholarships.length}):
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-              {savedScholarships.map(sId => (
-                <div key={sId} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 12px', background: 'rgba(0,0,0,0.2)', borderRadius: '6px', fontSize: '0.82rem' }}>
-                  <span>{sId === 'pm-merit-scholarship' || sId === 'central-sector' ? "Central Sector Scheme of Scholarships" : "AICTE Pragati Girl Scholarship"}</span>
-                  <span className="badge badge-emerald">Eligible</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div>
-            <div style={{ fontSize: '0.82rem', fontWeight: 600, color: '#34d399', marginBottom: '6px' }}>
-              Active Internship Submissions ({appliedInternships.length}):
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-              {appliedInternships.map(iId => (
-                <div key={iId} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 12px', background: 'rgba(0,0,0,0.2)', borderRadius: '6px', fontSize: '0.82rem' }}>
-                  <span>Microsoft Software Engineering Intern</span>
-                  <span className="badge badge-indigo">Under Review</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
+        )}
       </div>
     </div>
   );

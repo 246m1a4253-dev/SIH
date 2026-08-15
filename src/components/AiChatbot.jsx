@@ -1,8 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
 import { MOCK_PROMPTS, MOCK_CAREERS } from '../data/mockData';
+import { INDIAN_LANGUAGES } from '../data/languages';
 import { 
-  Bot, Send, Sparkles, Volume2, User, RefreshCw, Lightbulb 
+  Bot, Send, Sparkles, Volume2, User, RefreshCw, Lightbulb, Globe 
 } from 'lucide-react';
 
 export const AiChatbot = () => {
@@ -10,8 +11,12 @@ export const AiChatbot = () => {
     studentProfile = {}, 
     targetCareer = MOCK_CAREERS[0], 
     chatMessages = [], 
-    setChatMessages 
+    setChatMessages,
+    language = 'en',
+    t
   } = useApp();
+
+  const currentLangObj = INDIAN_LANGUAGES.find(l => l.code === language) || INDIAN_LANGUAGES[0];
 
   const [inputQuery, setInputQuery] = useState('');
   const [isTyping, setIsTyping] = useState(false);
@@ -245,6 +250,11 @@ For your current profile as an ${studentProfile?.educationLevel || 'Undergraduat
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+            <span className="badge badge-indigo" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <Globe size={14} color="var(--primary)" />
+              <span>Language: {currentLangObj.nativeName} ({currentLangObj.name})</span>
+            </span>
+
             <button 
               onClick={() => setVoiceMode(voiceMode === 'pawan_kalyan' ? 'standard' : 'pawan_kalyan')}
               className={`badge ${voiceMode === 'pawan_kalyan' ? 'badge-amber' : 'badge-purple'}`}

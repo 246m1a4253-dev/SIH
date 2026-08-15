@@ -1,24 +1,26 @@
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
-import { 
-  UserCheck, Compass, Map, FileText, Award, 
-  GraduationCap, Briefcase, Bot, LayoutDashboard, Sparkles, LogIn, LogOut, KeyRound, ShieldCheck, ChevronDown, User
+import { Logo3D } from './Logo3D';
+import { LanguageSelector } from './LanguageSelector';
+import { ThemeToggle } from './ThemeToggle';
+import {
+  UserCheck, Compass, Map, FileText, Award,
+  GraduationCap, Briefcase, Bot, LayoutDashboard, LogIn, LogOut, KeyRound, ShieldCheck, ChevronDown, User
 } from 'lucide-react';
 
 export const Navbar = () => {
-  const { activeTab, setActiveTab, studentProfile, currentUser, openAuthModal, logoutUser } = useApp();
+  const { activeTab, setActiveTab, studentProfile, currentUser, openAuthModal, logoutUser, t } = useApp();
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const navItems = [
-    { id: 'onboarding', label: 'Student Profile', icon: UserCheck },
-    { id: 'careers', label: 'AI Careers', icon: Compass },
-    { id: 'skillgap', label: 'Skill Gap & Roadmap', icon: Map },
-    { id: 'resume', label: 'Resume ATS Analyzer', icon: FileText },
-    { id: 'scholarships', label: 'Scholarships', icon: Award },
-    { id: 'colleges', label: 'Colleges', icon: GraduationCap },
-    { id: 'internships', label: 'Internships', icon: Briefcase },
-    { id: 'chatbot', label: 'AI Mentor', icon: Bot, badge: 'Live' },
-    { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard }
+    { id: 'dashboard', label: t('dashboard', 'Dashboard'), icon: LayoutDashboard },
+    { id: 'careers', label: t('ai_careers', 'AI Careers'), icon: Compass },
+    { id: 'skillgap', label: t('skill_gap', 'Skill Gap & Roadmap'), icon: Map },
+    { id: 'resume', label: t('resume_ats', 'Resume ATS Analyzer'), icon: FileText },
+    { id: 'scholarships', label: t('scholarships', 'Scholarships'), icon: Award },
+    { id: 'colleges', label: t('colleges', 'Colleges'), icon: GraduationCap },
+    { id: 'internships', label: t('internships', 'Internships'), icon: Briefcase },
+    { id: 'chatbot', label: t('ai_mentor', 'AI Mentor'), icon: Bot, badge: 'Live' }
   ];
 
   return (
@@ -26,40 +28,18 @@ export const Navbar = () => {
       <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '12px 24px' }}>
         {/* Top Header Row */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px', flexWrap: 'wrap', gap: '12px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-            <div style={{ 
-              width: '42px', 
-              height: '42px', 
-              borderRadius: '12px', 
-              background: 'linear-gradient(135deg, #6366f1 0%, #06b6d4 100%)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              boxShadow: '0 0 15px rgba(99, 102, 241, 0.5)'
-            }}>
-              <Sparkles size={24} color="#fff" />
-            </div>
-            <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <h1 style={{ fontSize: '1.35rem', fontWeight: 800 }} className="gradient-text">
-                  MargDarshak AI
-                </h1>
-                <span className="badge badge-indigo">SIH25094</span>
-                <span className="badge badge-cyan" style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                  Smart Education Portal
-                </span>
-              </div>
-              <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-                One-Stop Personalized Career & Education Advisor
-              </p>
-            </div>
-          </div>
+          
+          {/* 3D Colorful Artistic Logo & Branding */}
+          <Logo3D size="medium" showText={true} />
 
-          {/* Student Profile Quick Badge / Auth Buttons */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', position: 'relative' }}>
+          {/* Controls: Language Selector + Dark/Light Theme Switcher + Auth Buttons */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', position: 'relative', flexWrap: 'wrap' }}>
+            <LanguageSelector />
+            <ThemeToggle />
+
             {currentUser && currentUser.isAuthenticated ? (
               <div style={{ position: 'relative' }}>
-                <div 
+                <div
                   onClick={() => setDropdownOpen(!dropdownOpen)}
                   style={{
                     display: 'flex',
@@ -114,88 +94,142 @@ export const Navbar = () => {
                 {dropdownOpen && (
                   <div style={{
                     position: 'absolute',
-                    top: 'calc(100% + 8px)',
+                    top: 'calc(100% + 10px)',
                     right: 0,
-                    width: '220px',
-                    background: 'rgba(15, 23, 42, 0.95)',
-                    backdropFilter: 'blur(16px)',
+                    width: '260px',
+                    background: 'var(--bg-card)',
+                    backdropFilter: 'blur(20px)',
+                    WebkitBackdropFilter: 'blur(20px)',
                     borderRadius: '16px',
-                    border: '1px solid var(--border-color)',
-                    boxShadow: '0 10px 30px rgba(0, 0, 0, 0.5)',
-                    padding: '8px',
+                    border: '1px solid var(--border-active)',
+                    boxShadow: '0 12px 36px rgba(0, 0, 0, 0.4), 0 0 20px rgba(99, 102, 241, 0.25)',
+                    padding: '10px',
                     zIndex: 200,
                     display: 'flex',
                     flexDirection: 'column',
-                    gap: '4px'
+                    gap: '6px'
                   }} className="animate-fade-in">
-                    <div style={{ padding: '8px 12px', borderBottom: '1px solid var(--border-color)', marginBottom: '4px' }}>
-                      <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Signed in as</div>
-                      <div style={{ fontSize: '0.82rem', fontWeight: 700, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    {/* Header Info Banner */}
+                    <div style={{
+                      padding: '10px 12px',
+                      background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(236, 72, 153, 0.12) 100%)',
+                      borderRadius: '12px',
+                      marginBottom: '4px',
+                      border: '1px solid var(--border-color)'
+                    }}>
+                      <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontWeight: 500 }}>Signed in as</div>
+                      <div style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-main)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                         {currentUser.email}
                       </div>
                     </div>
 
+                    {/* Menu Item 1: Student Dashboard */}
                     <button
                       onClick={() => { setActiveTab('onboarding'); setDropdownOpen(false); }}
                       style={{
                         display: 'flex',
                         alignItems: 'center',
-                        gap: '8px',
-                        padding: '8px 12px',
-                        borderRadius: 'var(--radius-sm)',
-                        fontSize: '0.82rem',
-                        color: 'var(--text-light)',
-                        background: 'transparent',
-                        border: 'none',
+                        gap: '12px',
+                        padding: '10px 12px',
+                        borderRadius: '10px',
+                        fontSize: '0.85rem',
+                        fontWeight: 600,
+                        color: 'var(--text-main)',
+                        background: 'rgba(99, 102, 241, 0.08)',
+                        border: '1px solid transparent',
                         cursor: 'pointer',
-                        textAlign: 'left'
+                        textAlign: 'left',
+                        transition: 'all 0.2s ease'
                       }}
-                      className="btn-hover-highlight"
+                      className="glass-card-interactive"
                     >
-                      <User size={15} color="#818cf8" />
+                      <div style={{
+                        width: '30px',
+                        height: '30px',
+                        borderRadius: '8px',
+                        background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        boxShadow: '0 0 10px rgba(99, 102, 241, 0.4)',
+                        flexShrink: 0
+                      }}>
+                        <User size={16} color="#ffffff" />
+                      </div>
                       <span>Student Dashboard</span>
                     </button>
 
+                    {/* Menu Item 2: Reset Password */}
                     <button
                       onClick={() => { openAuthModal('forgot_password'); setDropdownOpen(false); }}
                       style={{
                         display: 'flex',
                         alignItems: 'center',
-                        gap: '8px',
-                        padding: '8px 12px',
-                        borderRadius: 'var(--radius-sm)',
-                        fontSize: '0.82rem',
-                        color: 'var(--text-light)',
-                        background: 'transparent',
-                        border: 'none',
+                        gap: '12px',
+                        padding: '10px 12px',
+                        borderRadius: '10px',
+                        fontSize: '0.85rem',
+                        fontWeight: 600,
+                        color: 'var(--text-main)',
+                        background: 'rgba(16, 185, 129, 0.08)',
+                        border: '1px solid transparent',
                         cursor: 'pointer',
-                        textAlign: 'left'
+                        textAlign: 'left',
+                        transition: 'all 0.2s ease'
                       }}
+                      className="glass-card-interactive"
                     >
-                      <KeyRound size={15} color="#34d399" />
+                      <div style={{
+                        width: '30px',
+                        height: '30px',
+                        borderRadius: '8px',
+                        background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        boxShadow: '0 0 10px rgba(16, 185, 129, 0.4)',
+                        flexShrink: 0
+                      }}>
+                        <KeyRound size={16} color="#ffffff" />
+                      </div>
                       <span>Reset Password</span>
                     </button>
 
                     <div style={{ height: '1px', background: 'var(--border-color)', margin: '4px 0' }} />
 
+                    {/* Menu Item 3: Sign Out */}
                     <button
                       onClick={() => { logoutUser(); setDropdownOpen(false); }}
                       style={{
                         display: 'flex',
                         alignItems: 'center',
-                        gap: '8px',
-                        padding: '8px 12px',
-                        borderRadius: 'var(--radius-sm)',
-                        fontSize: '0.82rem',
-                        color: '#fca5a5',
-                        background: 'rgba(239, 68, 68, 0.15)',
-                        border: '1px solid rgba(239, 68, 68, 0.3)',
+                        gap: '12px',
+                        padding: '10px 12px',
+                        borderRadius: '10px',
+                        fontSize: '0.85rem',
+                        fontWeight: 700,
+                        color: '#ffffff',
+                        background: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)',
+                        border: 'none',
+                        boxShadow: '0 4px 14px rgba(239, 68, 68, 0.35)',
                         cursor: 'pointer',
                         textAlign: 'left',
-                        fontWeight: 600
+                        transition: 'all 0.2s ease'
                       }}
+                      className="glass-card-interactive"
                     >
-                      <LogOut size={15} color="#ef4444" />
+                      <div style={{
+                        width: '30px',
+                        height: '30px',
+                        borderRadius: '8px',
+                        background: 'rgba(255, 255, 255, 0.2)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        flexShrink: 0
+                      }}>
+                        <LogOut size={16} color="#ffffff" />
+                      </div>
                       <span>Sign Out & View Login Page</span>
                     </button>
                   </div>
@@ -230,6 +264,7 @@ export const Navbar = () => {
           {navItems.map(item => {
             const Icon = item.icon;
             const isActive = activeTab === item.id;
+
             return (
               <button
                 key={item.id}
@@ -241,23 +276,27 @@ export const Navbar = () => {
                   padding: '8px 16px',
                   borderRadius: 'var(--radius-sm)',
                   fontSize: '0.85rem',
-                  fontWeight: isActive ? 600 : 500,
+                  fontWeight: isActive ? 700 : 500,
                   whiteSpace: 'nowrap',
                   border: isActive ? '1px solid var(--border-active)' : '1px solid transparent',
-                  background: isActive ? 'rgba(99, 102, 241, 0.15)' : 'rgba(255, 255, 255, 0.02)',
-                  color: isActive ? '#a5b4fc' : 'var(--text-muted)',
+                  background: isActive 
+                    ? 'linear-gradient(135deg, rgba(99, 102, 241, 0.25) 0%, rgba(6, 182, 212, 0.15) 100%)' 
+                    : 'rgba(255, 255, 255, 0.02)',
+                  color: isActive ? 'var(--text-main)' : 'var(--text-muted)',
                   cursor: 'pointer',
-                  transition: 'all 0.2s ease'
+                  transition: 'all 0.2s ease',
+                  boxShadow: isActive ? '0 4px 14px rgba(99, 102, 241, 0.2)' : 'none'
                 }}
+                className="glass-card-interactive"
               >
-                <Icon size={16} color={isActive ? '#818cf8' : 'var(--text-muted)'} />
+                <Icon size={16} color={isActive ? 'var(--primary)' : 'var(--text-muted)'} />
                 <span>{item.label}</span>
                 {item.badge && (
-                  <span style={{ 
-                    fontSize: '0.65rem', 
-                    background: 'var(--secondary)', 
-                    color: 'white', 
-                    padding: '1px 6px', 
+                  <span style={{
+                    fontSize: '0.65rem',
+                    background: 'var(--secondary)',
+                    color: 'white',
+                    padding: '1px 6px',
                     borderRadius: '99px',
                     fontWeight: 700
                   }}>

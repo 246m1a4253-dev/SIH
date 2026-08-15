@@ -12,6 +12,7 @@ import { AiChatbot } from './components/AiChatbot';
 import { ProgressDashboard } from './components/ProgressDashboard';
 import { AuthModal } from './components/AuthModal';
 import { LoginPage } from './components/LoginPage';
+import { Logo3D } from './components/Logo3D';
 
 const MainContent = () => {
   const { activeTab } = useApp();
@@ -32,7 +33,7 @@ const MainContent = () => {
 };
 
 const AuthenticatedApp = () => {
-  const { currentUser } = useApp();
+  const { currentUser, t } = useApp();
 
   // Enforce Login Landing Page Gate
   if (!currentUser || !currentUser.isAuthenticated) {
@@ -47,12 +48,10 @@ const AuthenticatedApp = () => {
 
       {/* Footer */}
       <footer className="glass-card" style={{ borderRadius: 0, borderBottom: 0, borderLeft: 0, borderRight: 0, marginTop: '40px' }}>
-        <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '20px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px', fontSize: '0.82rem', color: 'var(--text-muted)' }}>
+        <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '20px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px', fontSize: '0.82rem', color: 'var(--text-muted)' }}>
+          <Logo3D size="small" showText={true} animated={false} />
           <div>
-            <strong style={{ color: 'var(--text-main)' }}>MargDarshak AI</strong> — One-Stop Personalized Career & Education Advisor (PS ID: SIH25094)
-          </div>
-          <div>
-            Ministry of Education • Smart Career & Education Portal
+            Ministry of Education • Smart Career & Education Portal (29 Languages Supported)
           </div>
         </div>
       </footer>

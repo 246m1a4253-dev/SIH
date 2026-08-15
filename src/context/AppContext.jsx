@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { MOCK_CAREERS, MOCK_COLLEGES, MOCK_SCHOLARSHIPS, MOCK_INTERNSHIPS } from '../data/mockData';
+import { getTranslation } from '../data/translations';
 
 const AppContext = createContext();
 
@@ -17,6 +18,38 @@ export const AppProvider = ({ children }) => {
   // Navigation tab
   const [activeTab, setActiveTab] = useState('onboarding');
 
+  // Theme state ('dark' | 'light')
+  const [theme, setTheme] = useState(() => {
+    const savedTheme = localStorage.getItem('sih_theme');
+    return savedTheme || 'dark';
+  });
+
+  // Language state (29 Indian languages code)
+  const [language, setLanguage] = useState(() => {
+    const savedLang = localStorage.getItem('sih_lang');
+    return savedLang || 'en';
+  });
+
+  // Sync theme to localStorage and DOM data-theme attribute
+  useEffect(() => {
+    localStorage.setItem('sih_theme', theme);
+    document.body.setAttribute('data-theme', theme);
+    document.documentElement.setAttribute('data-theme', theme);
+  }, [theme]);
+
+  // Sync language to localStorage
+  useEffect(() => {
+    localStorage.setItem('sih_lang', language);
+  }, [language]);
+
+  const toggleTheme = () => {
+    setTheme(prev => prev === 'dark' ? 'light' : 'dark');
+  };
+
+  const t = (key, defaultVal) => {
+    return getTranslation(key, language, defaultVal);
+  };
+
   // Auth State
   const [registeredUsers, setRegisteredUsers] = useState(() => {
     const saved = localStorage.getItem('sih_registered_users');
@@ -30,7 +63,7 @@ export const AppProvider = ({ children }) => {
 
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [authMode, setAuthMode] = useState('login'); // 'login' | 'register' | 'forgot_password' | 'otp_verify' | 'reset_password'
-  
+
   // Pending OTP state
   const [pendingOtp, setPendingOtp] = useState(null); // { email, code, purpose, tempUser }
 
@@ -239,7 +272,7 @@ export const AppProvider = ({ children }) => {
       throw new Error('Invalid password reset session.');
     }
 
-    setRegisteredUsers(prev => prev.map(u => 
+    setRegisteredUsers(prev => prev.map(u =>
       u.email.toLowerCase() === pendingOtp.email.toLowerCase() ? { ...u, password: newPassword } : u
     ));
 
@@ -262,25 +295,25 @@ export const AppProvider = ({ children }) => {
 
   // Helper to toggle bookmarking items
   const toggleSaveCareer = (id) => {
-    setSavedCareers(prev => 
+    setSavedCareers(prev =>
       prev.includes(id) ? prev.filter(c => c !== id) : [...prev, id]
     );
   };
 
   const toggleSaveScholarship = (id) => {
-    setSavedScholarships(prev => 
+    setSavedScholarships(prev =>
       prev.includes(id) ? prev.filter(s => s !== id) : [...prev, id]
     );
   };
 
   const toggleSaveCollege = (id) => {
-    setSavedColleges(prev => 
+    setSavedColleges(prev =>
       prev.includes(id) ? prev.filter(c => c !== id) : [...prev, id]
     );
   };
 
   const toggleApplyInternship = (id) => {
-    setAppliedInternships(prev => 
+    setAppliedInternships(prev =>
       prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
     );
   };
@@ -305,6 +338,12 @@ export const AppProvider = ({ children }) => {
 
   return (
     <AppContext.Provider value={{
+      theme,
+      setTheme,
+      toggleTheme,
+      language,
+      setLanguage,
+      t,
       activeTab,
       setActiveTab,
       studentProfile,
