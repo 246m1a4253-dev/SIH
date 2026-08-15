@@ -85,7 +85,7 @@ export const Navbar = () => {
                       <ChevronDown size={14} color="var(--text-muted)" />
                     </div>
                     <div style={{ fontSize: '0.7rem', color: 'var(--accent-cyan)' }}>
-                      {currentUser.emailVerified ? '✓ Verified Student' : studentProfile.educationLevel}
+                      {currentUser.emailVerified ? t('verified_student', '✓ Verified Student') : studentProfile.educationLevel}
                     </div>
                   </div>
                 </div>
@@ -117,7 +117,7 @@ export const Navbar = () => {
                       marginBottom: '4px',
                       border: '1px solid var(--border-color)'
                     }}>
-                      <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontWeight: 500 }}>Signed in as</div>
+                      <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontWeight: 500 }}>{t('signed_in_as', 'Signed in as')}</div>
                       <div style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-main)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                         {currentUser.email}
                       </div>
@@ -156,7 +156,7 @@ export const Navbar = () => {
                       }}>
                         <User size={16} color="#ffffff" />
                       </div>
-                      <span>Student Dashboard</span>
+                      <span>{t('student_dashboard', 'Student Dashboard')}</span>
                     </button>
 
                     {/* Menu Item 2: Reset Password */}
@@ -192,7 +192,7 @@ export const Navbar = () => {
                       }}>
                         <KeyRound size={16} color="#ffffff" />
                       </div>
-                      <span>Reset Password</span>
+                      <span>{t('reset_password', 'Reset Password')}</span>
                     </button>
 
                     <div style={{ height: '1px', background: 'var(--border-color)', margin: '4px 0' }} />
@@ -230,7 +230,7 @@ export const Navbar = () => {
                       }}>
                         <LogOut size={16} color="#ffffff" />
                       </div>
-                      <span>Sign Out & View Login Page</span>
+                      <span>{t('sign_out_view_login', 'Sign Out & View Login Page')}</span>
                     </button>
                   </div>
                 )}
@@ -243,7 +243,7 @@ export const Navbar = () => {
                   style={{ fontSize: '0.82rem', padding: '6px 14px' }}
                 >
                   <LogIn size={14} />
-                  <span>Sign In</span>
+                  <span>{t('tab_sign_in', 'Sign In')}</span>
                 </button>
 
                 <button
@@ -252,7 +252,7 @@ export const Navbar = () => {
                   style={{ fontSize: '0.82rem', padding: '6px 14px' }}
                 >
                   <ShieldCheck size={14} />
-                  <span>Register Account</span>
+                  <span>{t('register', 'Register Account')}</span>
                 </button>
               </div>
             )}

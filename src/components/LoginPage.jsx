@@ -255,30 +255,30 @@ export const LoginPage = () => {
           <Logo3D size="large" showText={true} />
 
           <h2 style={{ fontSize: '1.5rem', fontWeight: 700, lineHeight: 1.3, color: '#f8fafc' }}>
-            One-Stop AI Career, Scholarship & College Recommendation Platform
+            {t('login_heading', 'One-Stop AI Career, Scholarship & College Recommendation Platform')}
           </h2>
 
           <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: 1.5 }}>
-            Sign in with your verified Gmail account to access personalized career roadmaps, college predictors, ATS resume scoring, and official Government of India internships.
+            {t('login_subheading', 'Sign in with your verified Gmail account to access personalized career roadmaps, college predictors, ATS resume scoring, and official Government of India internships.')}
           </p>
 
           {/* Feature Badges Grid */}
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginTop: '10px' }}>
             <div className="glass-card" style={{ padding: '14px', display: 'flex', alignItems: 'center', gap: '10px' }}>
               <Compass color="#818cf8" size={20} />
-              <div style={{ fontSize: '0.82rem', fontWeight: 600 }}>AI Career Matcher</div>
+              <div style={{ fontSize: '0.82rem', fontWeight: 600 }}>{t('badge_career_matcher', 'AI Career Matcher')}</div>
             </div>
             <div className="glass-card" style={{ padding: '14px', display: 'flex', alignItems: 'center', gap: '10px' }}>
               <Map color="#22d3ee" size={20} />
-              <div style={{ fontSize: '0.82rem', fontWeight: 600 }}>Skill Gap Roadmap</div>
+              <div style={{ fontSize: '0.82rem', fontWeight: 600 }}>{t('badge_skill_gap', 'Skill Gap Roadmap')}</div>
             </div>
             <div className="glass-card" style={{ padding: '14px', display: 'flex', alignItems: 'center', gap: '10px' }}>
               <Award color="#f472b6" size={20} />
-              <div style={{ fontSize: '0.82rem', fontWeight: 600 }}>Govt Scholarships</div>
+              <div style={{ fontSize: '0.82rem', fontWeight: 600 }}>{t('badge_govt_scholarships', 'Govt Scholarships')}</div>
             </div>
             <div className="glass-card" style={{ padding: '14px', display: 'flex', alignItems: 'center', gap: '10px' }}>
               <Briefcase color="#34d399" size={20} />
-              <div style={{ fontSize: '0.82rem', fontWeight: 600 }}>🇮🇳 PM & Govt Internships</div>
+              <div style={{ fontSize: '0.82rem', fontWeight: 600 }}>🇮🇳 {t('badge_govt_internships', 'PM & Govt Internships')}</div>
             </div>
           </div>
         </div>
@@ -319,7 +319,7 @@ export const LoginPage = () => {
                   transition: 'all 0.2s ease'
                 }}
               >
-                Sign In
+                {t('tab_sign_in', 'Sign In')}
               </button>
               <button
                 onClick={() => { setMode('register'); setErrorMsg(''); }}
@@ -335,7 +335,7 @@ export const LoginPage = () => {
                   transition: 'all 0.2s ease'
                 }}
               >
-                Create Account
+                {t('tab_create_account', 'Create Account')}
               </button>
             </div>
           )}
@@ -365,7 +365,7 @@ export const LoginPage = () => {
             <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               <div>
                 <label style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-main)', display: 'block', marginBottom: '6px' }}>
-                  Gmail Address
+                  {t('label_gmail', 'Gmail Address')}
                 </label>
                 <div style={{ position: 'relative' }}>
                   <Mail size={16} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--primary)' }} />
@@ -387,13 +387,13 @@ export const LoginPage = () => {
 
               <div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-                  <label style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-main)' }}>Password</label>
+                  <label style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-main)' }}>{t('label_password', 'Password')}</label>
                   <button 
                     type="button" 
                     onClick={() => { setMode('forgot_password'); setErrorMsg(''); }}
                     style={{ background: 'none', border: 'none', color: 'var(--primary)', fontWeight: 600, fontSize: '0.78rem', cursor: 'pointer', padding: 0 }}
                   >
-                    Forgot Password?
+                    {t('label_forgot_password', 'Forgot Password?')}
                   </button>
                 </div>
                 <div style={{ position: 'relative' }}>
@@ -437,12 +437,12 @@ export const LoginPage = () => {
 
               <button type="submit" className="btn btn-primary" style={{ width: '100%', padding: '12px', marginTop: '6px', fontSize: '0.92rem', fontWeight: 700 }}>
                 <LogIn size={18} />
-                <span>Sign In to Platform</span>
+                <span>{t('btn_sign_in_platform', 'Sign In to Platform')}</span>
               </button>
 
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px', margin: '12px 0', fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-muted)' }}>
                 <div style={{ flex: 1, height: '1px', background: 'var(--border-color)' }}></div>
-                <span>EVALUATION DEMO ACCESS</span>
+                <span>{t('text_demo_access', 'EVALUATION DEMO ACCESS')}</span>
                 <div style={{ flex: 1, height: '1px', background: 'var(--border-color)' }}></div>
               </div>
 
@@ -461,7 +461,7 @@ export const LoginPage = () => {
                 }}
               >
                 <Sparkles size={16} color="var(--primary)" />
-                <span>1-Click Demo Access (Aamir Hassan)</span>
+                <span>{t('btn_1click_demo', '1-Click Demo Access (Aamir Hassan)')}</span>
               </button>
             </form>
           )}
@@ -470,7 +470,7 @@ export const LoginPage = () => {
           {mode === 'register' && (
             <form onSubmit={handleRegister} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
               <div>
-                <label style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-main)', display: 'block', marginBottom: '6px' }}>Full Name</label>
+                <label style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-main)', display: 'block', marginBottom: '6px' }}>{t('label_full_name', 'Full Name')}</label>
                 <div style={{ position: 'relative' }}>
                   <User size={16} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--primary)' }} />
                   <input
@@ -490,7 +490,7 @@ export const LoginPage = () => {
               </div>
 
               <div>
-                <label style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-main)', display: 'block', marginBottom: '6px' }}>Gmail Address</label>
+                <label style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-main)', display: 'block', marginBottom: '6px' }}>{t('label_gmail', 'Gmail Address')}</label>
                 <div style={{ position: 'relative' }}>
                   <Mail size={16} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--primary)' }} />
                   <input
@@ -510,7 +510,7 @@ export const LoginPage = () => {
               </div>
 
               <div>
-                <label style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-main)', display: 'block', marginBottom: '6px' }}>Mobile Number</label>
+                <label style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-main)', display: 'block', marginBottom: '6px' }}>{t('label_mobile_number', 'Mobile Number')}</label>
                 <div style={{ position: 'relative' }}>
                   <Phone size={16} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--primary)' }} />
                   <input
@@ -530,7 +530,7 @@ export const LoginPage = () => {
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
                 <div>
-                  <label style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-main)', display: 'block', marginBottom: '6px' }}>Password</label>
+                  <label style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-main)', display: 'block', marginBottom: '6px' }}>{t('label_password', 'Password')}</label>
                   <div style={{ position: 'relative' }}>
                     <input
                       type={showPassword ? "text" : "password"}
@@ -567,7 +567,7 @@ export const LoginPage = () => {
                   </div>
                 </div>
                 <div>
-                  <label style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-main)', display: 'block', marginBottom: '6px' }}>Confirm</label>
+                  <label style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-main)', display: 'block', marginBottom: '6px' }}>{t('label_confirm_password', 'Confirm Password')}</label>
                   <div style={{ position: 'relative' }}>
                     <input
                       type={showConfirmPassword ? "text" : "password"}
@@ -606,7 +606,7 @@ export const LoginPage = () => {
               </div>
 
               <button type="submit" className="btn btn-primary" style={{ width: '100%', padding: '12px', marginTop: '6px', fontWeight: 700 }}>
-                <span>Send Gmail OTP Code</span>
+                <span>{t('btn_send_otp', 'Send Gmail OTP Code')}</span>
                 <ArrowRight size={16} />
               </button>
             </form>
@@ -635,9 +635,9 @@ export const LoginPage = () => {
                       borderRadius: '4px',
                       letterSpacing: '1px'
                     }}>
-                      GMAIL NOTIFICATION
+                      {t('badge_gmail_notification', 'GMAIL NOTIFICATION')}
                     </div>
-                    <span style={{ fontSize: '0.78rem', color: '#34d399', fontWeight: 600 }}>📨 Dispatched to Gmail</span>
+                    <span style={{ fontSize: '0.78rem', color: '#34d399', fontWeight: 600 }}>📨 {t('text_dispatched_gmail', 'Dispatched to Gmail')}</span>
                   </div>
 
                   <button
@@ -646,16 +646,16 @@ export const LoginPage = () => {
                     className="btn btn-secondary btn-sm"
                     style={{ fontSize: '0.72rem', padding: '3px 8px', background: 'rgba(52, 211, 153, 0.15)', color: '#34d399', border: '1px solid rgba(52, 211, 153, 0.4)' }}
                   >
-                    ⚡ Auto-Fill Code
+                    ⚡ {t('btn_autofill_code', 'Auto-Fill Code')}
                   </button>
                 </div>
 
                 <div>
                   <div style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-light)' }}>
-                    Original Gmail Verification Code
+                    {t('text_original_code', 'Original Gmail Verification Code')}
                   </div>
                   <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: '2px' }}>
-                    Destination: <strong>{pendingOtp?.email}</strong>
+                    {t('text_destination', 'Destination')}: <strong>{pendingOtp?.email}</strong>
                   </div>
                   <div style={{ 
                     fontSize: '1.5rem', 
@@ -676,7 +676,7 @@ export const LoginPage = () => {
 
               <div>
                 <label style={{ fontSize: '0.78rem', color: 'var(--text-muted)', display: 'block', marginBottom: '8px', textAlign: 'center' }}>
-                  Enter 6-Digit OTP Code Below
+                  {t('label_enter_otp', 'Enter 6-Digit OTP Code Below')}
                 </label>
                 <input
                   type="text"
@@ -702,11 +702,11 @@ export const LoginPage = () => {
 
               <button type="submit" className="btn btn-primary" style={{ width: '100%', padding: '12px' }}>
                 <CheckCircle2 size={18} />
-                <span>Verify OTP & Unlock App</span>
+                <span>{t('btn_verify_otp', 'Verify OTP & Unlock App')}</span>
               </button>
 
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '0.78rem', color: 'var(--text-muted)' }}>
-                <span>OTP Timeout: <strong style={{ color: timer > 0 ? '#38bdf8' : '#ef4444' }}>{timer}s</strong></span>
+                <span>{t('text_otp_timeout', 'OTP Timeout')}: <strong style={{ color: timer > 0 ? '#38bdf8' : '#ef4444' }}>{timer}s</strong></span>
                 <button
                   type="button"
                   onClick={handleResendOtp}
@@ -722,7 +722,7 @@ export const LoginPage = () => {
                   }}
                 >
                   <RefreshCw size={12} />
-                  <span>Resend OTP Code</span>
+                  <span>{t('btn_resend_otp', 'Resend OTP Code')}</span>
                 </button>
               </div>
             </form>
@@ -732,7 +732,7 @@ export const LoginPage = () => {
           {mode === 'forgot_password' && (
             <form onSubmit={handleForgotPasswordSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
               <div>
-                <label style={{ fontSize: '0.78rem', color: 'var(--text-muted)', display: 'block', marginBottom: '6px' }}>Registered Gmail Address</label>
+                <label style={{ fontSize: '0.78rem', color: 'var(--text-muted)', display: 'block', marginBottom: '6px' }}>{t('label_gmail', 'Registered Gmail Address')}</label>
                 <div style={{ position: 'relative' }}>
                   <Mail size={16} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
                   <input
@@ -756,7 +756,7 @@ export const LoginPage = () => {
               </div>
 
               <button type="submit" className="btn btn-primary" style={{ width: '100%', padding: '12px' }}>
-                <span>Send Reset OTP to Gmail</span>
+                <span>{t('btn_send_reset_otp', 'Send Reset OTP to Gmail')}</span>
                 <ArrowRight size={16} />
               </button>
 
@@ -765,7 +765,7 @@ export const LoginPage = () => {
                 onClick={() => setMode('login')}
                 style={{ background: 'none', border: 'none', color: 'var(--text-muted)', fontSize: '0.78rem', cursor: 'pointer', textAlign: 'center' }}
               >
-                Back to Sign In
+                {t('btn_back_to_signin', 'Back to Sign In')}
               </button>
             </form>
           )}
