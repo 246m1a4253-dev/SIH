@@ -16,7 +16,7 @@ const POPULAR_INTERESTS = [
 ];
 
 export const ProfileOnboarding = () => {
-  const { studentProfile, setStudentProfile, setActiveTab, currentUser, openAuthModal } = useApp();
+  const { studentProfile, setStudentProfile, setActiveTab, currentUser, openAuthModal, t } = useApp();
 
   const [newSkill, setNewSkill] = useState('');
   const [newInterest, setNewInterest] = useState('');
@@ -96,12 +96,12 @@ export const ProfileOnboarding = () => {
       <div className="glass-card" style={{ padding: '28px', background: 'linear-gradient(135deg, rgba(37,99,235,0.08) 0%, rgba(16,185,129,0.08) 100%)', border: '1px solid #bfdbfe' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
           <div>
-            <span className="badge badge-indigo" style={{ marginBottom: '8px' }}>Module 1: Student Profile</span>
+            <span className="badge badge-indigo" style={{ marginBottom: '8px' }}>{t('module_student_profile', 'Module 1: Student Profile')}</span>
             <h2 style={{ fontSize: '1.8rem', fontWeight: 800, marginBottom: '6px' }} className="gradient-text">
-              Personalized Career Profile & Aptitude Matrix
+              {t('profile_title', 'Personalized Career Profile & Aptitude Matrix')}
             </h2>
             <p style={{ color: 'var(--text-muted)', maxWidth: '750px' }}>
-              Your profile is processed by MargDarshak AI to match you with top careers, pinpoint missing skills, recommend state & national scholarships, and craft a month-by-month learning roadmap.
+              {t('profile_desc', 'Your profile is processed by MargDarshak AI to match you with top careers, pinpoint missing skills, recommend state & national scholarships, and craft a month-by-month learning roadmap.')}
             </p>
           </div>
           <button
@@ -110,7 +110,7 @@ export const ProfileOnboarding = () => {
             style={{ padding: '12px 24px', fontSize: '0.95rem' }}
           >
             <Sparkles size={18} />
-            <span>Generate AI Recommendations</span>
+            <span>{t('btn_generate_ai', 'Generate AI Recommendations')}</span>
             <ArrowRight size={18} />
           </button>
         </div>
@@ -140,16 +140,16 @@ export const ProfileOnboarding = () => {
                 <h4 style={{ fontSize: '1.05rem', fontWeight: 700, color: '#0f172a' }}>{studentProfile.name}</h4>
                 {currentUser && currentUser.isAuthenticated ? (
                   <span className="badge badge-emerald" style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.72rem' }}>
-                    <ShieldCheck size={12} /> Verified Gmail ({studentProfile.email})
+                    <ShieldCheck size={12} /> {t('verified_gmail', 'Verified Gmail')} ({studentProfile.email})
                   </span>
                 ) : (
                   <span className="badge badge-indigo" style={{ fontSize: '0.72rem' }}>
-                    Guest Session (Unsaved)
+                    {t('guest_session', 'Guest Session (Unsaved)')}
                   </span>
                 )}
               </div>
               <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: '2px' }}>
-                Profile Completeness: <strong style={{ color: '#2563eb' }}>{completenessScore}%</strong> (8 Key Career Metrics Configured)
+                {t('profile_completeness', 'Profile Completeness')}: <strong style={{ color: '#2563eb' }}>{completenessScore}%</strong> ({t('key_metrics_configured', '8 Key Career Metrics Configured')})
               </div>
             </div>
           </div>
@@ -162,7 +162,7 @@ export const ProfileOnboarding = () => {
                 style={{ fontSize: '0.8rem' }}
               >
                 <KeyRound size={14} color="#10b981" />
-                <span>Reset Password</span>
+                <span>{t('reset_password', 'Reset Password')}</span>
               </button>
             ) : (
               <button
@@ -171,7 +171,7 @@ export const ProfileOnboarding = () => {
                 style={{ fontSize: '0.8rem' }}
               >
                 <LogIn size={14} />
-                <span>Register Account & Save Progress</span>
+                <span>{t('register', 'Register Account & Save Progress')}</span>
               </button>
             )}
           </div>
@@ -194,11 +194,11 @@ export const ProfileOnboarding = () => {
           <div className="glass-card" style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', borderBottom: '1px solid var(--border-color)', paddingBottom: '12px' }}>
               <User color="#818cf8" size={20} />
-              <h3 style={{ fontSize: '1.1rem', fontWeight: 700 }}>1. Basic & Demographic Details</h3>
+              <h3 style={{ fontSize: '1.1rem', fontWeight: 700 }}>{t('sec_basic_details', '1. Basic & Demographic Details')}</h3>
             </div>
 
             <div className="input-group">
-              <label className="input-label">Full Name</label>
+              <label className="input-label">{t('label_full_name', 'Full Name')}</label>
               <input
                 type="text"
                 className="input-field"
@@ -210,7 +210,7 @@ export const ProfileOnboarding = () => {
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
               <div className="input-group">
-                <label className="input-label">Age</label>
+                <label className="input-label">{t('label_age', 'Age')}</label>
                 <input
                   type="number"
                   className="input-field"
@@ -220,7 +220,7 @@ export const ProfileOnboarding = () => {
                 />
               </div>
               <div className="input-group">
-                <label className="input-label">Gender</label>
+                <label className="input-label">{t('label_gender', 'Gender')}</label>
                 <select
                   className="select-field"
                   value={studentProfile.gender}
@@ -234,7 +234,7 @@ export const ProfileOnboarding = () => {
             </div>
 
             <div className="input-group">
-              <label className="input-label">Category</label>
+              <label className="input-label">{t('label_category', 'Category')}</label>
               <select
                 className="select-field"
                 value={studentProfile.category}
@@ -248,7 +248,7 @@ export const ProfileOnboarding = () => {
             </div>
 
             <div className="input-group">
-              <label className="input-label">Annual Family Income (For Scholarships)</label>
+              <label className="input-label">{t('label_annual_income', 'Annual Family Income (For Scholarships)')}</label>
               <select
                 className="select-field"
                 value={studentProfile.annualIncomeBracket}
@@ -265,11 +265,11 @@ export const ProfileOnboarding = () => {
           <div className="glass-card" style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', borderBottom: '1px solid var(--border-color)', paddingBottom: '12px' }}>
               <GraduationCap color="#22d3ee" size={20} />
-              <h3 style={{ fontSize: '1.1rem', fontWeight: 700 }}>2. Academic Qualifications</h3>
+              <h3 style={{ fontSize: '1.1rem', fontWeight: 700 }}>{t('sec_academic_qualifications', '2. Academic Qualifications')}</h3>
             </div>
 
             <div className="input-group">
-              <label className="input-label">Current Education Level</label>
+              <label className="input-label">{t('label_education_level', 'Current Education Level')}</label>
               <select
                 className="select-field"
                 value={studentProfile.educationLevel}
@@ -284,7 +284,7 @@ export const ProfileOnboarding = () => {
             </div>
 
             <div className="input-group">
-              <label className="input-label">Board / Institution Name</label>
+              <label className="input-label">{t('label_board_institution', 'Board / Institution Name')}</label>
               <input
                 type="text"
                 className="input-field"
@@ -296,7 +296,7 @@ export const ProfileOnboarding = () => {
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
               <div className="input-group">
-                <label className="input-label">Aggregate Marks / CGPA</label>
+                <label className="input-label">{t('label_marks_cgpa', 'Aggregate Marks / CGPA')}</label>
                 <input
                   type="text"
                   className="input-field"
@@ -306,7 +306,7 @@ export const ProfileOnboarding = () => {
                 />
               </div>
               <div className="input-group">
-                <label className="input-label">Max Fee Budget / Year</label>
+                <label className="input-label">{t('label_max_budget', 'Max Fee Budget / Year')}</label>
                 <input
                   type="text"
                   className="input-field"
@@ -318,7 +318,7 @@ export const ProfileOnboarding = () => {
             </div>
 
             <div className="input-group">
-              <label className="input-label">Preferred Study / Work Location</label>
+              <label className="input-label">{t('label_preferred_location', 'Preferred Study / Work Location')}</label>
               <select
                 className="select-field"
                 value={studentProfile.preferredLocation}
@@ -336,10 +336,10 @@ export const ProfileOnboarding = () => {
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <Award color="#fbbf24" size={20} />
-              <h3 style={{ fontSize: '1.1rem', fontWeight: 700 }}>3. Current Acquired Skills</h3>
+              <h3 style={{ fontSize: '1.1rem', fontWeight: 700 }}>{t('sec_current_skills', '3. Current Acquired Skills')}</h3>
             </div>
             <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-              {studentProfile.skills.length} skills added
+              {studentProfile.skills.length} {t('skills_added', 'skills added')}
             </span>
           </div>
 
@@ -362,20 +362,20 @@ export const ProfileOnboarding = () => {
             <input
               type="text"
               className="input-field"
-              placeholder="Add a new skill (e.g. PyTorch, React, Public Speaking)..."
+              placeholder={t('ph_add_skill', 'Add a new skill (e.g. PyTorch, React, Public Speaking)...')}
               value={newSkill}
               onChange={e => setNewSkill(e.target.value)}
               onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); addSkill(); } }}
             />
             <button type="button" className="btn btn-secondary" onClick={() => addSkill()}>
               <Plus size={16} />
-              <span>Add</span>
+              <span>{t('btn_add', 'Add')}</span>
             </button>
           </div>
 
           {/* Quick Suggestions */}
           <div>
-            <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '8px' }}>Popular Skills to Tag:</div>
+            <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '8px' }}>{t('popular_skills', 'Popular Skills to Tag:')}</div>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
               {POPULAR_SKILLS.filter(s => !studentProfile.skills.includes(s)).map((skill, idx) => (
                 <button
@@ -397,10 +397,10 @@ export const ProfileOnboarding = () => {
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <Heart color="#f472b6" size={20} />
-              <h3 style={{ fontSize: '1.1rem', fontWeight: 700 }}>4. Interests & Aspirations</h3>
+              <h3 style={{ fontSize: '1.1rem', fontWeight: 700 }}>{t('sec_interests_aspirations', '4. Interests & Aspirations')}</h3>
             </div>
             <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-              {studentProfile.interests.length} interests added
+              {studentProfile.interests.length} {t('interests_added', 'interests added')}
             </span>
           </div>
 
@@ -423,20 +423,20 @@ export const ProfileOnboarding = () => {
             <input
               type="text"
               className="input-field"
-              placeholder="Add an interest (e.g. Artificial Intelligence, Medicine)..."
+              placeholder={t('ph_add_interest', 'Add an interest (e.g. Artificial Intelligence, Medicine)...')}
               value={newInterest}
               onChange={e => setNewInterest(e.target.value)}
               onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); addInterest(); } }}
             />
             <button type="button" className="btn btn-secondary" onClick={() => addInterest()}>
               <Plus size={16} />
-              <span>Add</span>
+              <span>{t('btn_add', 'Add')}</span>
             </button>
           </div>
 
           {/* Quick Suggestions */}
           <div>
-            <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '8px' }}>Popular Interest Areas:</div>
+            <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '8px' }}>{t('popular_interests', 'Popular Interest Areas:')}</div>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
               {POPULAR_INTERESTS.filter(i => !studentProfile.interests.includes(i)).map((interest, idx) => (
                 <button
@@ -461,7 +461,7 @@ export const ProfileOnboarding = () => {
             style={{ padding: '14px 32px', fontSize: '1rem' }}
           >
             <Sparkles size={20} />
-            <span>Save Profile & Analyze Career Compatibility</span>
+            <span>{t('btn_save_analyze', 'Save Profile & Analyze Career Compatibility')}</span>
           </button>
         </div>
       </form>
